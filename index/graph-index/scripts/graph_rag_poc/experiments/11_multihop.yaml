@@ -1,0 +1,39 @@
+name: 11_multihop
+description: |
+  기법 R-5 (Multi-hop iterative retrieval). 1차 dense → LLM 추가검색어 → 2차 타깃 재검색 → 풀 확장.
+  synthesizer는 baseline과 동일 → retriever 변경 순효과만 격리.
+  타깃: 정성진단의 multi-hop 갭 Q15(간접 영향력)·Q16(보고라인 체인) + fanout Q21·23. lazy_qt가 직접hop만 맞히던 것.
+  R-2(broad lexical)와 달리 엔티티-연결 정밀 확장 → 노이즈 최소 기대.
+  주의: multihop의 follow-up LLM콜·2차 임베딩은 retriever 내부라 avg calls에 미집계(실제 비용은 더 큼).
+techniques: [R-5]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+
+categories: null
+
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  lazy_qt_multihop:
+    retriever: {type: multihop, top_k: 20, hop2_k: 5}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/11_multihop

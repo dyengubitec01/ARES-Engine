@@ -1,0 +1,384 @@
+/* created by ARES team [2026-03-24] */
+/* 디자인 토큰 — CSS 변수 기반 테마 */
+
+:root {
+  /* ── 폰트 ── */
+  --font-family: 'Pretendard';
+
+  /* ══ 프리미티브 컬러 ══ */
+
+  /* ── primary (보라) ── */
+  --color-primary-50: #FAFBFF;
+  --color-primary-100: #F2F3FF;
+  --color-primary-200: #D9DBFD;
+  --color-primary-300: #C4C8FB;
+  --color-primary-400: #B4BDFA;
+  --color-primary-500: #868DFF;
+  --color-primary-600: #626BF7;
+  --color-primary-700: #424CD3;
+  --color-primary-800: #2D35BA;
+  --color-primary-900: #202684;
+  --color-primary-1000: #1C2156;
+
+  /* ── primary 복합 별칭 ── */
+  --color-primary-600-50: #FAFBFF;
+  --color-primary-600-100: #F2F3FF;
+  --color-primary-600-400: #B4BDFA;
+  --color-primary-600-700: #424CD3;
+
+  /* ── secondary (그린) ── */
+  --color-secondary-50: #F3FFFB;
+  --color-secondary-100: #DFF1EC;
+  --color-secondary-200: #BEE3D8;
+  --color-secondary-300: #9ED4C5;
+  --color-secondary-400: #7DC6B1;
+  --color-secondary-500: #5DB89E;
+  --color-secondary-600: #4A937E;
+  --color-secondary-700: #386E5F;
+  --color-secondary-800: #254A3F;
+  --color-secondary-900: #132520;
+
+  /* ── tertiary (베이지) ── */
+  --color-tertiary-50: #F3F1EB;
+  --color-tertiary-100: #EBE7DA;
+  --color-tertiary-200: #E3DFD2;
+  --color-tertiary-300: #D4CEC0;
+  --color-tertiary-400: #BFB9A6;
+  --color-tertiary-600: #9A9180;
+  --color-tertiary-700: #7A7060;
+  --color-tertiary-800: #5E5548;
+
+  /* ── warning (오렌지) ── */
+  --color-warning-50: #FFF8EC;
+  --color-warning-100: #FFF2E0;
+  --color-warning-200: #FFE5BC;
+  --color-warning-300: #FFD080;
+  --color-warning-400: #FFBF7A;
+  --color-warning-500: #E6832C;
+  --color-warning-600: #B85F15;
+  --color-warning-700: #8A4000;
+
+  /* ── error (레드) ── */
+  --color-error-50: #FFF5F5;
+  --color-error-100: #F9ECEC;
+  --color-error-200: #F4D1D1;
+  --color-error-300: #EAAAAA;
+  --color-error-400: #F87070;
+  --color-error-500: #ED1919;
+  --color-error-600: #C01212;
+  --color-error-700: #9D0B0B;
+
+  /* ── success (그린) ── */
+  --color-success-50: #F0FBF5;
+  --color-success-100: #CEF2DF;
+  --color-success-200: #AAEACC;
+  --color-success-300: #6ED4A3;
+  --color-success-400: #3DBF82;
+  --color-success-500: #1FA362;
+  --color-success-600: #158049;
+  --color-success-700: #0E5E34;
+
+  /* ── grayscale ── */
+  --color-grayscale-50: #FFFFFF;
+  --color-grayscale-100: #F7F7F7;
+  --color-grayscale-150: #E6E6E6;
+  --color-grayscale-200: #D4D4D4;
+  --color-grayscale-250: #BFBFBF;
+  --color-grayscale-300: #AAAAAA;
+  --color-grayscale-400: #8E8E8E;
+  --color-grayscale-500: #707174;
+  --color-grayscale-600: #5D5E62;
+  --color-grayscale-700: #4B4D50;
+  --color-grayscale-800: #3A3C40;
+  --color-grayscale-900: #292B2F;
+  --color-grayscale-950: #181A1F;
+
+  /* ══ Semantic: Status ══ */
+
+  /* ── status: info ── */
+  --status-info-bg: var(--color-primary-100);
+  --status-info-border: var(--color-primary-400);
+  --status-info-text: var(--color-primary-800);
+  --status-info-icon: var(--color-primary-700);
+
+  /* ── status: uploaded ── */
+  --status-uploaded-bg: var(--color-primary-50);
+  --status-uploaded-border: var(--color-primary-300);
+  --status-uploaded-text: var(--color-primary-500);
+  --status-uploaded-icon: var(--color-primary-500);
+
+  /* ── status: pending ── */
+  --status-pending-bg: var(--color-tertiary-50);
+  --status-pending-border: var(--color-tertiary-300);
+  --status-pending-text: var(--color-tertiary-700);
+  --status-pending-icon: var(--color-tertiary-700);
+
+  /* ── status: processing ── */
+  --status-processing-bg: var(--color-primary-100);
+  --status-processing-border: var(--color-primary-400);
+  --status-processing-text: var(--color-primary-700);
+  --status-processing-icon: var(--color-primary-600);
+
+  /* ── status: success ── */
+  --status-success-bg: var(--color-success-50);
+  --status-success-border: var(--color-success-200);
+  --status-success-text: var(--color-success-700);
+  --status-success-icon: var(--color-success-600);
+
+  /* ── status: rejected ── */
+  --status-rejected-bg: var(--color-tertiary-100);
+  --status-rejected-border: var(--color-tertiary-400);
+  --status-rejected-text: var(--color-tertiary-800);
+  --status-rejected-icon: var(--color-tertiary-800);
+
+  /* ── status: warning ── */
+  --status-warning-bg: var(--color-warning-100);
+  --status-warning-border: var(--color-warning-400);
+  --status-warning-text: var(--color-warning-700);
+  --status-warning-icon: var(--color-warning-500);
+
+  /* ── status: error ── */
+  --status-error-bg: var(--color-error-100);
+  --status-error-border: var(--color-error-300);
+  --status-error-text: var(--color-error-600);
+  --status-error-icon: var(--color-error-600);
+
+  /* ══ 기타 토큰 ══ */
+
+  /* ── 뱃지 (권한) ── */
+  --color-badge-admin-bg: #dbeafe;
+  --color-badge-admin-text: #1e40af;
+  --color-badge-default-bg: #f3e8ff;
+  --color-badge-default-text: #6b21a8;
+
+  /* ── 특수 ── */
+  --color-accent-dark: #1B365D;
+
+  /* ── 스켈레톤 ── */
+  --skeleton-base: #E5E7EB;
+  --skeleton-highlight: #F3F4F6;
+
+  /* ── 그림자 ── */
+  --shadow-dropdown: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0 4px 24px rgba(0, 0, 0, 0.15);
+
+  /* ── 메인 배경 그라데이션 ── */
+  --main-gradient: radial-gradient(138.61% 123.97% at 43.91% 0%, #FFF 28.19%, #F7FBFE 70.67%, #E2F2EE 100%);
+
+  /* ── 아이콘 색상 (SVGR + currentColor 용) ── */
+  --icon-color: #292B2F;
+  --icon-active-color: #626BF7;
+
+  /* ── 드롭다운 메뉴 ── */
+  --menu-bg: #FFFFFF;
+  --menu-border: #E6E6E6;
+
+  /* ── 스크롤 페이드 (사용성 평가 설문 등) ── */
+  --color-scroll-fade: rgba(0, 0, 0, 0.04);
+
+  /* ── 레이아웃 ── */
+  --sidebar-width: 300px;
+  --sidebar-collapsed-width: 92px;
+  --content-padding: 40px;
+  --header-height: 24px;
+  --header-padding: 24px;
+}
+
+/* ── 태블릿 (1024px 이하) ── */
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-width: 240px;
+    --sidebar-collapsed-width: 72px;
+    --content-padding: 20px;
+    --header-padding: 16px;
+  }
+}
+
+/* ── 모바일 (768px 이하) ── */
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 0px;
+    --sidebar-collapsed-width: 0px;
+    --content-padding: 12px;
+    --header-padding: 12px;
+  }
+}
+
+/* ── 다크 모드 ── */
+[data-theme='dark'] {
+  /* ── primary (보라) ── */
+  --color-primary-50: #1C2156;
+  --color-primary-100: #202684;
+  --color-primary-200: #2D35BA;
+  --color-primary-300: #424CD3;
+  --color-primary-400: #626BF7;
+  --color-primary-500: #868DFF;
+  --color-primary-600: #B4BDFA;
+  --color-primary-700: #C4C8FB;
+  --color-primary-800: #D9DBFD;
+  --color-primary-900: #F2F3FF;
+  --color-primary-1000: #FAFBFF;
+
+  /* ── primary 복합 별칭 ── */
+  --color-primary-600-50: #1C2156;
+  --color-primary-600-100: #202684;
+  --color-primary-600-400: #626BF7;
+  --color-primary-600-700: #C4C8FB;
+
+  /* ── secondary (그린) ── */
+  --color-secondary-50: #132520;
+  --color-secondary-100: #254A3F;
+  --color-secondary-200: #386E5F;
+  --color-secondary-300: #4A937E;
+  --color-secondary-400: #5DB89E;
+  --color-secondary-500: #7DC6B1;
+  --color-secondary-600: #9ED4C5;
+  --color-secondary-700: #BEE3D8;
+  --color-secondary-800: #DFF1EC;
+  --color-secondary-900: #F3FFFB;
+
+  /* ── tertiary (베이지) ── */
+  --color-tertiary-50: #5E5548;
+  --color-tertiary-100: #7A707A;
+  --color-tertiary-200: #9A9180;
+  --color-tertiary-300: #BFB9A6;
+  --color-tertiary-400: #D4CEC0;
+  --color-tertiary-600: #E3DFD2;
+  --color-tertiary-700: #EBE7DA;
+  --color-tertiary-800: #F3F1EB;
+
+  /* ── warning (오렌지) ── */
+  --color-warning-50: #8A4000;
+  --color-warning-100: #B85F15;
+  --color-warning-200: #E6832C;
+  --color-warning-300: #FFBF7A;
+  --color-warning-400: #FFD080;
+  --color-warning-500: #FFE5BC;
+  --color-warning-600: #FFF2E0;
+  --color-warning-700: #FFF8EC;
+
+  /* ── error (레드) ── */
+  --color-error-50: #9D0B0B;
+  --color-error-100: #C01212;
+  --color-error-200: #ED1919;
+  --color-error-300: #F87070;
+  --color-error-400: #EAAAAA;
+  --color-error-500: #F4D1D1;
+  --color-error-600: #F9ECEC;
+  --color-error-700: #FFF5F5;
+
+  /* ── success (그린) ── */
+  --color-success-50: #0E5E34;
+  --color-success-100: #158049;
+  --color-success-200: #1FA362;
+  --color-success-300: #3DBF82;
+  --color-success-400: #6ED4A3;
+  --color-success-500: #AAEACC;
+  --color-success-600: #CEF2DF;
+  --color-success-700: #F0FBF5;
+
+  /* ── grayscale ── */
+  --color-grayscale-50: #181A1F;
+  --color-grayscale-100: #292B2F;
+  --color-grayscale-150: #3A3C40;
+  --color-grayscale-200: #4B4D50;
+  --color-grayscale-250: #5D5E62;
+  --color-grayscale-300: #707174;
+  --color-grayscale-400: #8E8E8E;
+  --color-grayscale-500: #AAAAAA;
+  --color-grayscale-600: #BFBFBF;
+  --color-grayscale-700: #D4D4D4;
+  --color-grayscale-800: #E6E6E6;
+  --color-grayscale-900: #F7F7F7;
+  --color-grayscale-950: #FFFFFF;
+
+  /* ══ Semantic: Status (dark) ══ */
+
+  /* ── status: info ── */
+  --status-info-bg: var(--color-primary-900);
+  --status-info-border: var(--color-primary-500);
+  --status-info-text: var(--color-primary-100);
+  --status-info-icon: var(--color-primary-200);
+
+  /* ── status: uploaded ── */
+  --status-uploaded-bg: var(--color-primary-1000);
+  --status-uploaded-border: var(--color-primary-600);
+  --status-uploaded-text: var(--color-primary-100);
+  --status-uploaded-icon: var(--color-primary-100);
+
+  /* ── status: pending ── */
+  --status-pending-bg: var(--color-tertiary-800);
+  --status-pending-border: var(--color-tertiary-600);
+  --status-pending-text: var(--color-tertiary-100);
+  --status-pending-icon: var(--color-tertiary-200);
+
+  /* ── status: processing ── */
+  --status-processing-bg: var(--color-primary-900);
+  --status-processing-border: var(--color-primary-500);
+  --status-processing-text: var(--color-primary-200);
+  --status-processing-icon: var(--color-primary-300);
+
+  /* ── status: success ── */
+  --status-success-bg: var(--color-success-700);
+  --status-success-border: var(--color-success-600);
+  --status-success-text: var(--color-success-50);
+  --status-success-icon: var(--color-success-100);
+
+  /* ── status: rejected ── */
+  --status-rejected-bg: var(--color-tertiary-800);
+  --status-rejected-border: var(--color-tertiary-600);
+  --status-rejected-text: var(--color-tertiary-50);
+  --status-rejected-icon: var(--color-tertiary-100);
+
+  /* ── status: warning ── */
+  --status-warning-bg: var(--color-warning-700);
+  --status-warning-border: var(--color-warning-600);
+  --status-warning-text: var(--color-warning-50);
+  --status-warning-icon: var(--color-warning-100);
+
+  /* ── status: error ── */
+  --status-error-bg: var(--color-error-700);
+  --status-error-border: var(--color-error-600);
+  --status-error-text: var(--color-error-50);
+  --status-error-icon: var(--color-error-100);
+
+  /* ── 특수 ── */
+  --color-accent-dark: #93C5FD;
+
+  /* ── 뱃지 (권한) ── */
+  --color-badge-admin-bg: #1E3A5F;
+  --color-badge-admin-text: #93C5FD;
+  --color-badge-default-bg: #2D1B4E;
+  --color-badge-default-text: #C4B5FD;
+
+  /* ── 스켈레톤 ── */
+  --skeleton-base: #374151;
+  --skeleton-highlight: #4B5563;
+
+  /* ── 그림자 ── */
+  --shadow-dropdown: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-modal: 0 4px 24px rgba(0, 0, 0, 0.5);
+
+  /* ── 메인 배경 그라데이션 ── */
+  --main-gradient: radial-gradient(138.61% 123.97% at 43.91% 0%, #181A1F 28.19%, #181A1F 70.67%, #254A3F 100%);
+
+  /* ── 아이콘 색상 (다크 모드) ── */
+  --icon-color: #F7F7F7;
+  --icon-active-color: #B4BDFA;
+
+  /* ── 드롭다운 메뉴 ── */
+  --menu-bg: #3A3C40;
+  --menu-border: #4B4D50;
+
+  /* ── 스크롤 페이드 (사용성 평가 설문 등) ── */
+  --color-scroll-fade: rgba(255, 255, 255, 0.04);
+}
+
+/* ── 글로벌 폰트 적용 ── */
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-family);
+}

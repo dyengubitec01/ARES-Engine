@@ -1,0 +1,28 @@
+name: 03_lazy_qt_embed
+description: |
+  lazy_qt 풀버전 (임베딩 회수 + lazy 합성).
+  쿼리시점 메커니즘 = relevance 필터 + claim 추출 + map-reduce.
+  baseline은 같은 후보 풀에서 단일 생성 → 합성 메커니즘의 효과 격리.
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+
+categories: null
+
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer: {type: single_shot, system_prompt: system_baseline}
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: lazy_filter_claim
+      relevance_prompt: relevance_strict
+      claim_prompt: claim_strict
+      reduce_prompt: system_baseline
+
+output: results/03_lazy_qt_embed

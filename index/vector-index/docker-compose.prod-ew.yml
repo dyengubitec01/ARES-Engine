@@ -1,0 +1,81 @@
+# ============================================
+# EW 공통 설정 (YAML 앵커)
+# ============================================
+x-ew-base: &ew-base
+  build:
+    context: .
+    dockerfile: Dockerfile.ew
+  image: registry.example.com/ares/ew:${EW_IMAGE_TAG:-latest}
+  restart: always
+  deploy:
+    resources:
+      limits:
+        cpus: '4'
+        memory: 8G
+      reservations:
+        cpus: '1'
+        memory: 2G
+  environment: &ew-env
+    # Kafka 설정
+    KAFKA_BOOTSTRAP_SERVERS: "localhost:9092"
+    KAFKA_REQUEST_TOPIC: rag.embeddings.request
+    KAFKA_STATUS_TOPIC: rag.embeddings.status
+    KAFKA_CONSUMER_GROUP: rag-group
+    KAFKA_SECURITY_PROTOCOL: SASL_PLAINTEXT
+    KAFKA_SASL_MECHANISM: SCRAM-SHA-256
+    KAFKA_SASL_USERNAME: rag-user
+    KAFKA_SASL_PASSWORD: ${KAFKA_SASL_PASSWORD}
+    # MinIO 설정
+    MINIO_ENDPOINT: "localhost:9000"
+    MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+    MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+    MINIO_SECURE: "false"
+    # Qdrant 설정
+    QDRANT_HOST: "localhost"
+    QDRANT_PORT: "6333"
+    # PostgreSQL 설정
+    POSTGRES_HOST: "localhost"
+    POSTGRES_PORT: "5432"
+    POSTGRES_USER: raguser
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    POSTGRES_DB: ragdb
+    POSTGRES_SCHEMA: rag
+    # BGE-M3 임베딩 API (보조 GPU 서버 TEI)
+    BGE_M3_API_URL: "http://localhost:4000/v1/embeddings"
+    BGE_M3_API_KEY: ${BGE_M3_API_KEY}
+    BGE_M3_MODEL_NAME: "embed-bge-m3"
+  volumes:
+    - ./logs:/app/logs
+  networks:
+    - rag-net
+  command: ["python", "-m", "workers.embedding_worker"]
+
+services:
+  # ============================================
+  # 애플리케이션 서비스 (EW x3)
+  # ============================================
+  ew-1:
+    <<: *ew-base
+    container_name: ew-1
+    environment:
+      <<: *ew-env
+      WORKER_ID: ew-1
+
+  ew-2:
+    <<: *ew-base
+    container_name: ew-2
+    environment:
+      <<: *ew-env
+      WORKER_ID: ew-2
+
+  ew-3:
+    <<: *ew-base
+    container_name: ew-3
+    environment:
+      <<: *ew-env
+      WORKER_ID: ew-3
+
+networks:
+  rag-net:
+    name: rag-net
+    driver: bridge

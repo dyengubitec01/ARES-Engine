@@ -1,0 +1,34 @@
+name: 07_egroup_smoke
+description: |
+  07_egroup 타깃 스모크 — 분산통합(distributed_integration) 5문만(Q5~9).
+  Tier-1 타깃 Q5·6·8 직격. 정식 07_egroup 전 저비용 신호 확인용.
+techniques: [I-3qt]
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+
+categories: [distributed_integration]
+
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  lazy_qt_egroup:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: entity_group, prompt: entity_extract}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/07_egroup_smoke

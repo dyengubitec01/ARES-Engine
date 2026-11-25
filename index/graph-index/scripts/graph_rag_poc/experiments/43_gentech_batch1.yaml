@@ -1,0 +1,34 @@
+name: 43_gentech_batch1
+description: |
+  step5 batch1 — 기존 컴포넌트 기법 일괄(graph baseline 위 격리). R-9 answer-type / I-3 entity-group / A-2 sub-Q.
+  6트랙(50문, temp=0): vector / vplus / vplus_critic(채택참조) / vplus_r9 / vplus_i3 / subq.
+techniques: [R-9, I-3, A-2]
+gen_temperature: 0
+corpus: data/chunks/scaled_1000.json
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+  - data/qa/golden_qa_graphtypes.json
+categories: null
+exclude_ids: [11, 46]
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer: {type: pipeline, stages: [{type: relevance_filter, prompt: relevance_strict}, {type: claim_extraction, prompt: claim_strict}, {type: reduce, prompt: system_baseline}]}
+  vplus:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json}
+    synthesizer: {type: pipeline, stages: [{type: relevance_filter, prompt: relevance_strict}, {type: claim_extraction, prompt: claim_strict}, {type: reduce, prompt: system_baseline}]}
+  vplus_critic:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json}
+    synthesizer: {type: pipeline, stages: [{type: relevance_filter, prompt: relevance_strict}, {type: claim_extraction, prompt: claim_strict}, {type: reduce, prompt: system_baseline}, {type: critic_gated, prompt: critic_relation}]}
+  vplus_r9:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json}
+    synthesizer: {type: pipeline, stages: [{type: answer_type_filter, prompt: relevance_strict}, {type: claim_extraction, prompt: claim_strict}, {type: reduce, prompt: system_baseline}]}
+  vplus_i3:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json}
+    synthesizer: {type: pipeline, stages: [{type: relevance_filter, prompt: relevance_strict}, {type: entity_group, prompt: entity_extract}, {type: claim_extraction, prompt: claim_strict}, {type: reduce, prompt: system_baseline}]}
+  subq:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json}
+    synthesizer: {type: subq_decompose, relevance_prompt: relevance_strict, decompose_prompt: subq_decompose, claim_prompt: claim_strict, reduce_prompt: system_baseline}
+output: results/43_gentech_batch1

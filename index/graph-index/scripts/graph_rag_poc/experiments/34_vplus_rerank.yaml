@@ -1,0 +1,47 @@
+name: 34_vplus_rerank
+description: |
+  step5 첫 기법 R-7 Rerank. always-both(vector+graph)가 진 원인=그래프 노이즈 희석을 재정렬+추림으로 잡기.
+  격리: vector / vector+graph / vector+graph+rerank (retriever 동일, rerank stage 유무만). 50문, temp=0.
+  rerank = 합친 ~37청크를 LLM이 관련도순 재정렬 → 상위 top_n=15만 → 희석 제거 기대.
+techniques: [vector_plus_graph, R-7]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+  - data/qa/golden_qa_graphtypes.json
+
+categories: null
+exclude_ids: [11, 46]
+
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  vplus:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json, top_entities: 8, hops: 2, max_path_len: 3, use_community: true}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  vplus_rerank:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json, top_entities: 8, hops: 2, max_path_len: 3, use_community: true}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: rerank, prompt: rerank_relevance, top_n: 15}
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/34_vplus_rerank

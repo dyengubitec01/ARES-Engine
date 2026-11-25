@@ -1,0 +1,14 @@
+name: gliner2_lazy_40
+description: GLiNER2 추출 + 공출현+Louvain (LLM-free), 40청크 골든
+
+extractor:
+  type: gliner2
+  chunks: data/chunks/golden_40.json
+
+graph:
+  type: lazy_community
+  min_entity_len: 2
+
+outputs:
+  extracted: data/graphs/gliner2/extracted_40.json
+  graph: data/graphs/gliner2/lazy_community_40.json

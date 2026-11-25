@@ -1,0 +1,30 @@
+# TOL Tool Definitions
+# OpenAI Function Calling Spec 형식 + Scope 매핑
+# 각 도구의 scopes 필드로 접근 가능한 Scope 목록 관리
+
+tools:
+  - name: "summary"
+    endpoint: "/v1/summary"
+    description: "텍스트 요약 — 긴 텍스트를 설정된 분량에 맞게 요약"
+    scopes: ["agent", "backend"]
+    parameters:
+      type: "object"
+      properties:
+        history:
+          type: "array"
+          description: "대화 이력 (최소 1건)"
+          items:
+            type: "object"
+            properties:
+              role:
+                type: "string"
+                enum: ["user", "assistant"]
+                description: "메시지 역할"
+              content:
+                type: "string"
+                description: "메시지 내용"
+            required: ["role", "content"]
+        summary:
+          type: "string"
+          description: "이전 요약 (갱신 시 전달)"
+      required: ["history"]

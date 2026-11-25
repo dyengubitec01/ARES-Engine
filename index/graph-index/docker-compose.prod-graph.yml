@@ -1,0 +1,49 @@
+# 그래프 빌드 배치 (PROD) — Jenkins(Jenkinsfile.prod-graph)가 ew-graph 이미지 빌드·푸시·배포.
+# EW와 같은 패턴이되 1회성 배치(restart:no, up -d 아님). 실행 = 호스트 cron(21시) 또는 수동:
+#   docker compose -f docker-compose.prod-graph.yml run --rm graph-build
+# env는 EW(prod) 관행대로 하드코딩. GRAPH_DB=prod (ragdb/rag, Qdrant rag_graph_entities_v1).
+# 사전조건: scripts/graph_build/schema_graph_prod.sql 로 ragdb.rag 에 rag_graph_* 테이블 생성 완료.
+services:
+  graph-build:
+    image: registry.example.com/ares/ew-graph:${EW_IMAGE_TAG:-latest}
+    restart: "no"
+    deploy:                              # EW 프로덕션과 공존 → 자원 캡 (21시 저부하 권장)
+      resources:
+        # memory 16G→10G: 호스트 총 RAM 15.6GiB·swap 0에서 16G 캡은 호스트 RAM보다 커
+        #   cgroup 제한이 발동하지 않는다. 컨테이너 OOM 대신 호스트 전역 OOM이 ew를 죽일 수 있다.
+        #   실측 피크 2.35GiB(d6aae3d 이후)이라 10G면 4배 여유.
+        limits: { cpus: '8', memory: 10G }
+        reservations: { cpus: '2', memory: 4G }
+    environment:
+      TZ: "Asia/Seoul"                   # 로그 타임스탬프 KST(UTC+9). 미설정시 컨테이너 기본 UTC.
+      # 사내 데이터스토어 (LAN)
+      POSTGRES_HOST: "localhost"
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: "raguser"
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: "ragdb"               # prod = ragdb / rag 스키마
+      POSTGRES_SCHEMA: "rag"
+      QDRANT_HOST: "localhost"
+      QDRANT_PORT: "6333"
+      # 엔티티 임베딩 = KT Cloud BGE-M3(8002, FlagEmbedding). 프로덕션(Mac)과 벡터 일치 검증 완료(fp16 오차뿐).
+      # 롤백: 게이트웨이로 되돌리려면 아래를 http://localhost:4000/v1/embeddings 로.
+      BGE_M3_API_URL: "http://localhost:8002/v1/embeddings"
+      BGE_M3_API_KEY: ${BGE_M3_API_KEY}
+      BGE_M3_MODEL_NAME: "embed-bge-m3"                    # 클라우드 서버는 무시(모델명 상관없이 bge-m3 인코딩)
+      # 클라우드 GPU API (KT Cloud NEXUS, 인터넷 outbound) — dev와 동일 서버 공유
+      GLINER_API_URL: "http://localhost:8001"
+      GLINER_API_KEY: ${GLINER_API_KEY}
+      GEMMA_API_URL: "http://localhost:8000"
+      GEMMA_API_KEY: ${GEMMA_API_KEY}
+      # 파이프라인 파라미터 (prod) — 전체 빌드(GRAPH_LIMIT 없음)
+      GRAPH_DB: "prod"
+      MIN_EDGE_WEIGHT: "2"        # 16만 스케일: 1개 청크 공출현(약한 노이즈) 가지치기
+      RESOLUTION: "10"            # Louvain 해상도. build20 실측: res=10이 최대군집 10.6k→1.1k 분해(주제 유지). res=1은 hairball.
+      MAX_EDGES: "50"
+      # per-chunk 관계라벨링(첫빌드 ~10h, 이후 캐시 델타). gemma 포화 ~32. RELATION_EXTRACT=0으로 끔.
+      RELATION_EXTRACT: "1"
+      RELATION_WORKERS: "32"
+      RELATION_MIN_ENT: "2"      # 2엔티티(1쌍) 청크부터 관계라벨(코퍼스 6.4%, 콜 +7%). run_pipeline 기본값과 통일.
+    volumes:
+      - ./logs:/app/logs
+    command: ["bash", "scripts/graph_build/run_pipeline.sh"]

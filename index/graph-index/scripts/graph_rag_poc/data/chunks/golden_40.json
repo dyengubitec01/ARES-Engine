@@ -1,0 +1,242 @@
+[
+  {
+    "chunk_index": 0,
+    "page_start": 1,
+    "category": "self_contained",
+    "text": "[회사 개요]\nAutonova는 2018년 4월 서울 강남에 설립된 자율주행 스타트업이다. 창업자는 두 명으로, CEO 김지훈과 CTO 박서연이 공동 창업했다. 본사는 서울 강남구에 위치하며 직원 수는 2025년 1월 기준 약 240명이다. 회사는 도심형 Level 4 자율주행 기술 개발을 핵심 사업으로 한다. 본사 외에 자회사 세 곳을 운영 중인데, 각각 인지(Vision), 판단·제어(Drive), HD맵·통신(Maps) 영역을 분담한다. 또한 COO는 이도현이 맡고 있으며 사업 전반의 운영을 총괄한다."
+  },
+  {
+    "chunk_index": 1,
+    "page_start": 2,
+    "category": "self_contained",
+    "text": "[자회사 소개 - Autonova-Vision]\nAutonova-Vision은 대전에 위치한 자회사로, 인지(perception) 기술을 전담한다. 대표는 정민호이며, 카메라/LiDAR/센서퓨전 팀을 운영한다. 직원 수는 약 60명이다. 핵심 기술은 YOLO-Auto v3 객체 인식 모델과 LiDAR-Fusion-Net 센서 융합 알고리즘이다. 카메라팀 팀장은 최영민이며 LG전자 출신이다. 자회사는 2019년에 분사 설립되었고, KAIST와 공동연구를 진행한다. Vision은 Phase 1 핵심 기술 확보를 주도해 2023년 말 완료를 발표했다."
+  },
+  {
+    "chunk_index": 2,
+    "page_start": 3,
+    "category": "self_contained",
+    "text": "[자회사 소개 - Autonova-Drive]\nAutonova-Drive는 판교에 위치한 자회사로, 판단과 제어(planning & control)를 담당한다. 대표는 한수정이며, 경로계획팀·제어팀·안전검증팀으로 구성된다. 직원 수는 약 80명이다. 핵심 기술은 PathPlanner-X 경로계획 알고리즘과 SafetyShield 안전 검증 시스템이다. 제어팀 팀장은 강현우이며 KAIST 석사 출신이다. Drive는 2020년에 설립되었고, Phase 2 프로젝트의 주관 자회사다. 시뮬레이션 도구 Sim-Replay도 자체 개발해 운영한다."
+  },
+  {
+    "chunk_index": 3,
+    "page_start": 4,
+    "category": "self_contained",
+    "text": "[자회사 소개 - Autonova-Maps]\nAutonova-Maps는 서울에 위치한 자회사로, HD맵 구축과 V2X 통신을 담당한다. 대표는 윤재혁이며, HD맵 제작팀과 V2X 통신팀을 운영한다. 직원 수는 약 50명이다. 핵심 기술은 HD-Map-Engine과 V2X-Protocol, Cloud-Sync 동기화 시스템이다. V2X 팀장은 김나래이며 삼성SDS 출신이다. Maps는 2021년에 설립되어 가장 최근에 분사한 자회사다. Phase 1부터 Phase 3까지 전 기간에 걸쳐 HD맵을 지속적으로 확장·갱신하는 역할을 맡는다."
+  },
+  {
+    "chunk_index": 4,
+    "page_start": 5,
+    "category": "self_contained",
+    "text": "[협력 관계 - KAIST]\nAutonova는 KAIST 자율주행연구실과 공식 협력 관계를 맺고 있다. 2018년 12월 양해각서(MoU)를 체결했고, 매년 갱신해 2025년 현재까지 유지 중이다. 협력 내용은 AI 알고리즘 공동연구, 인턴십 프로그램, 그리고 KAIST 자율주행연구실 졸업생의 우선 채용권이다. 박서연 CTO가 KAIST 박사 출신이라는 점이 이 관계의 출발이다. 연간 공동연구비는 약 15억 원 규모이며, 결과물은 양측이 공동 IP로 보유한다."
+  },
+  {
+    "chunk_index": 5,
+    "page_start": 6,
+    "category": "self_contained",
+    "text": "[협력 관계 - 현대자동차]\nAutonova는 현대자동차와 차량 플랫폼 공급 계약을 체결했다. 2020년 7월 MoU, 2022년 3월 본계약이며, 현재까지 연간 약 50대 규모의 테스트 차량을 공급받는다. 현대는 Autonova의 자율주행 소프트웨어를 통합 검증하는 협력 파트너 역할도 한다. 양사는 Phase 3 단계에서 양산 모델 공동개발을 목표로 협업을 확대할 예정이다. CEO 김지훈이 현대 자율주행팀 출신이라는 점이 협력의 단초가 되었다."
+  },
+  {
+    "chunk_index": 6,
+    "page_start": 7,
+    "category": "self_contained",
+    "text": "[Phase 1 완료 발표 - 2023년 12월]\nAutonova는 2023년 12월 18일 메인 프로젝트의 Phase 1 완료를 공식 발표했다. Phase 1의 목표는 카메라+LiDAR 센서퓨전 알고리즘과 객체 인식 모델 확보였으며, Vision 자회사가 주관했다. 주요 산출물은 YOLO-Auto v3 모델(객체 인식 정확도 96.4%)과 LiDAR-Fusion-Net이다. Phase 1 기간은 2022~2023년 2년이었고, 다음 Phase 2(판단·제어 통합)는 2024년 1월부터 본격 착수했다."
+  },
+  {
+    "chunk_index": 7,
+    "page_start": 8,
+    "category": "self_contained",
+    "text": "[메인 프로젝트 개요]\n메인 프로젝트명은 \"도심형 Level 4 자율주행\"이며, 총 기간 5년(2022~2027), 총 예산 약 400억 원 규모다. 3-Phase 구조로 운영된다. Phase 1은 인지 기술(2022~2023, 완료), Phase 2는 판단·제어 통합(2024~2025, 진행 중), Phase 3는 도심 실증 및 양산(2026~2027, 예정). Phase 3에서는 강남과 판교 지역의 실증 서비스를 목표로 하며, 현대자동차 차량 플랫폼과의 양산 통합도 같은 단계에서 진행될 예정이다."
+  },
+  {
+    "chunk_index": 8,
+    "page_start": 9,
+    "category": "distributed",
+    "text": "[CEO 인터뷰 발췌 - 매일경제 2022]\n\"창업 동기는 단순했어요. 현대에서 자율주행팀에 5년 있으면서, 기술은 충분히 가능한데 산업 의사결정이 너무 느리다는 답답함이 컸습니다.\" 김지훈 CEO는 인터뷰에서 창업 결심의 순간을 이렇게 회고했다. 그는 박서연 CTO와의 첫 만남이 2017년 한 자율주행 학회에서였다고 밝혔다. \"박서연 박사가 발표하던 센서퓨전 논문을 듣고 바로 명함을 건넸어요. 이듬해 회사를 같이 만들자고 제안했죠.\""
+  },
+  {
+    "chunk_index": 9,
+    "page_start": 10,
+    "category": "distributed",
+    "text": "[CTO 키노트 발췌 - CES 2024]\n박서연 CTO는 CES 2024 키노트에서 Autonova의 기술 비전을 발표했다. \"우리는 클라우드에 의존하지 않습니다. 모든 핵심 판단이 차량 내 Edge에서 일어나야 안전합니다. V2X는 보조 수단일 뿐, 메인이 될 수 없습니다.\" 그는 또한 KAIST 박사 시절부터 \"센서 융합이 자율주행의 본질\"이라는 신념을 가졌다고 언급했다. 발표에서는 LiDAR-Fusion-Net의 성능 데이터와 PathPlanner-X의 도심 시뮬레이션 결과가 공개되었다."
+  },
+  {
+    "chunk_index": 10,
+    "page_start": 11,
+    "category": "distributed",
+    "text": "[Vision 카메라팀 신기술 발표 - 2024 자율주행 컨퍼런스]\nAutonova-Vision의 카메라팀이 2024년 6월 자율주행 컨퍼런스에서 신기술을 발표했다. 발표자는 최영민 팀장이었고, YOLO-Auto v3의 야간 인식 성능을 기존 대비 23% 향상시킨 결과를 공개했다. 정민호 대표가 행사에 동석해 \"이번 결과는 Vision 자회사가 KAIST와 공동연구한 결과물 중 하나\"라고 설명했다. 발표 자리에는 박서연 CTO도 참석해 질의응답에 참여했다."
+  },
+  {
+    "chunk_index": 11,
+    "page_start": 12,
+    "category": "distributed",
+    "text": "[Drive 경로계획 보도 - 2024년 8월]\nAutonova-Drive가 도심 시나리오에서 PathPlanner-X의 새 버전을 공개했다. 신호 교차로 통과 성공률이 기존 91%에서 97%로 개선되었고, 회피 동작 응답 시간은 40ms에서 22ms로 단축되었다. 강현우 제어팀장이 기술 검증을 주도했으며, 한수정 대표는 \"Phase 2 진행 중 가장 중요한 마일스톤\"이라고 평가했다. 이 결과는 다음 단계에서 SafetyShield 안전 검증과 통합될 예정이다."
+  },
+  {
+    "chunk_index": 12,
+    "page_start": 13,
+    "category": "distributed",
+    "text": "[Maps HD맵 진행 보도 - 2024년 10월]\nAutonova-Maps가 강남 전역의 HD맵 구축을 완료했다고 보도자료를 통해 발표했다. 구축 면적은 약 39km²이며, HD-Map-Engine 자체 엔진을 사용해 차선 단위 정밀도 ±5cm를 달성했다. 김나래 V2X 팀장은 \"V2X-Protocol과 HD맵의 연동이 Phase 2의 핵심\"이라고 강조했다. 윤재혁 대표는 인터뷰에서 다음 목표가 판교 지역 HD맵 구축임을 밝혔다."
+  },
+  {
+    "chunk_index": 13,
+    "page_start": 14,
+    "category": "distributed",
+    "text": "[Autonova 2023 사업보고서 발췌]\n2023년 한 해 동안 회사는 매출 약 42억 원, 영업적자 약 90억 원을 기록했다. R&D 인력 비중은 78%에 달했고, KAIST 출신 직원 비중은 약 22%로 KAIST 협력의 효과를 보였다. 자회사별로는 Vision이 매출 기여도가 가장 높았다(약 21억 원). 이 시기 박서연 CTO가 KAIST 시절 후배 정민호를 Vision 대표로 영입한 것이 주요 인사로 기록되었다. COO 이도현은 보고서 서문에서 \"2024년에는 Phase 2 성과를 본격화하겠다\"고 언급했다."
+  },
+  {
+    "chunk_index": 14,
+    "page_start": 15,
+    "category": "distributed",
+    "text": "[CEO 김지훈 - 현대 시절 회고]\n2024년 한국공학한림원 강연에서 김지훈은 현대 자율주행팀 시절을 회고했다. \"5년간 차량 플랫폼 통합 책임자로 있으면서 가장 답답했던 건, 좋은 알고리즘이 차량에 들어가기까지 평균 2년이 걸린다는 것이었습니다.\" 그는 이 경험이 Autonova의 \"Edge AI 우선주의\"와 \"3-자회사 분리\" 전략의 근거가 되었다고 밝혔다. 현대 시절 직속 상사가 현재 현대자동차와의 협력 채널 중 한 명이라고도 언급했다."
+  },
+  {
+    "chunk_index": 15,
+    "page_start": 16,
+    "category": "distributed",
+    "text": "[CTO 박서연 - KAIST 박사 논문]\n박서연은 KAIST에서 2014년 자율주행 박사학위를 받았다. 박사 논문 주제는 \"이종 센서 융합을 위한 확률 그래프 모델\"이었다. 같은 연구실에서 정민호(2016년 박사)와 강현우(2017년 석사)가 그의 지도 아래 연구를 수행했다. 박서연이 졸업 후 일했던 곳은 미국 Waymo의 인지팀이며, 2018년 김지훈과 함께 귀국해 Autonova를 창업했다. 그가 KAIST에서 발표한 논문 중 일부는 LiDAR-Fusion-Net의 이론적 기반이 되었다."
+  },
+  {
+    "chunk_index": 16,
+    "page_start": 17,
+    "category": "distributed",
+    "text": "[자율주행 컨퍼런스 - 정민호 발표]\n2024년 9월 자율주행 컨퍼런스에서 Vision 자회사 대표 정민호가 \"Edge AI 기반 멀티센서 융합의 실전 적용\"이라는 주제로 발표했다. 발표에서 그는 박서연 CTO의 KAIST 시절 연구가 어떻게 양산 알고리즘으로 발전했는지 설명했다. 최영민 카메라팀장과 송지윤 연구원이 발표에 함께 등장했고, 송지윤은 \"Vision 인턴 출신으로 정직원이 된 첫 케이스\"로 소개되었다."
+  },
+  {
+    "chunk_index": 17,
+    "page_start": 18,
+    "category": "distributed",
+    "text": "[CEO 김지훈 - 창업 강연 발췌]\n2023년 청년창업포럼에서 김지훈은 \"창업할 때 가장 후회 없는 결정은 박서연을 공동창업자로 영입한 것\"이라고 말했다. 그는 자신의 강점이 \"산업 통합과 양산 경험\"이고, 박서연의 강점이 \"기초 알고리즘과 학계 연결\"이라며 두 강점이 합쳐져 Autonova가 가능했다고 설명했다. 또한 그는 자율주행 산업에서 \"한국 회사가 글로벌과 경쟁하려면 학계와 산업의 깊은 결합이 필수\"라고 강조했다."
+  },
+  {
+    "chunk_index": 18,
+    "page_start": 19,
+    "category": "distributed",
+    "text": "[KAIST 자율주행연구실 - 공동 논문 회고]\nKAIST 자율주행연구실은 2025년 1월 발간한 연구실 20주년 백서에서 박서연이 지도한 학생들의 성과를 소개했다. 정민호는 박서연이 직접 지도한 첫 박사과정 학생으로, 졸업 후 잠시 LG에 있다가 박서연의 요청으로 2019년 Autonova-Vision 대표로 합류했다. 강현우는 석사 학생이었고 졸업 후 만도에 있다가 한수정 대표의 영입으로 2021년 Drive에 합류했다. 두 사람 모두 박서연의 KAIST 시절 직제자다."
+  },
+  {
+    "chunk_index": 19,
+    "page_start": 20,
+    "category": "distributed",
+    "text": "[Drive 자회사 한수정 영입 - 2020년 보도]\n2020년 5월 Autonova는 Autonova-Drive 자회사의 초대 대표로 한수정을 영입했다고 발표했다. 한수정은 만도에서 제어 엔지니어로 12년간 근무한 베테랑으로, 차량 제어 분야의 권위자다. 영입은 김지훈 CEO가 직접 주도했고, 본인이 \"만도와 공동 프로젝트를 하면서 한수정 대표의 실력을 직접 확인했다\"고 밝혔다. 한수정 합류 후 Drive 자회사는 빠르게 조직을 갖췄고, 만도 시절 함께 일했던 강현우를 KAIST 석사 졸업 후 Drive로 영입했다."
+  },
+  {
+    "chunk_index": 20,
+    "page_start": 21,
+    "category": "distributed",
+    "text": "[Maps 자회사 윤재혁 영입 - 2021년 보도]\n2021년 6월 Autonova-Maps 자회사가 공식 설립되면서 초대 대표로 윤재혁이 영입되었다. 윤재혁은 네이버 지도팀에서 8년간 HD맵 관련 업무를 담당했고, 카카오모빌리티에서도 짧게 근무한 경력이 있다. 영입 과정에서 COO 이도현이 중요한 역할을 한 것으로 알려졌다. 윤재혁은 합류 후 곧 김나래(전 삼성SDS)와 오태경(전 카카오모빌리티)을 핵심 인력으로 영입했다. 오태경은 윤재혁이 카카오모빌리티 시절 직접 함께 일했던 동료다."
+  },
+  {
+    "chunk_index": 21,
+    "page_start": 22,
+    "category": "distributed",
+    "text": "[Autonova 종합 인터뷰 - 이코노미스트 2025]\n2025년 1월 이코노미스트 인터뷰에서 김지훈 CEO는 7년간의 창업 여정을 정리했다. \"창업 첫해는 박서연과 둘이서 시작했고, 지금은 240명 규모다. 자회사 셋을 분리한 게 가장 큰 변곡점이었다.\" 박서연 CTO는 같은 인터뷰에서 \"KAIST와의 결합이 우리 알고리즘의 깊이를 만들었고, 현대와의 결합이 양산 가능성을 만들었다\"고 답했다. 두 사람은 향후 Phase 3 양산을 가장 중요한 목표로 꼽았다."
+  },
+  {
+    "chunk_index": 22,
+    "page_start": 23,
+    "category": "sensemaking",
+    "text": "[전략 비전 - 3-자회사 분리 철학]\nAutonova의 가장 두드러진 경영 결정은 자회사 세 곳으로 분리한 구조다. 박서연 CTO는 한 인터뷰에서 \"자율주행은 너무 복잡해서 한 회사가 다 잘할 수 없다. 인지·판단·맵을 각자 deep tech로 분리하지 않으면 어느 하나도 깊어지지 않는다\"고 설명했다. 이는 단순한 조직 분리가 아니라 각 자회사가 독립적인 기술 의사결정권을 갖는 구조다. 본사는 통합과 전략만 담당한다. 이 구조가 의사결정 속도를 약 3배 빠르게 했다는 평가가 회사 내부에서 나온다."
+  },
+  {
+    "chunk_index": 23,
+    "page_start": 24,
+    "category": "sensemaking",
+    "text": "[기술 철학 - Edge AI 우선주의]\nAutonova의 또 다른 핵심 철학은 \"Edge AI 우선주의\"다. 모든 핵심 판단을 차량 내 Edge AI Box에서 처리하고, 클라우드 의존을 최소화한다. V2X 통신은 보조 수단으로만 사용한다. 박서연 CTO는 이 철학의 근거로 \"네트워크는 불안정해도 안전 판단은 절대 늦으면 안 된다\"고 자주 언급한다. 이 철학은 SafetyShield 시스템 설계에 직접 반영되었고, Vision·Drive 자회사가 공동 개발한 Edge AI Box가 그 물리적 구현이다."
+  },
+  {
+    "chunk_index": 24,
+    "page_start": 25,
+    "category": "sensemaking",
+    "text": "[경영 문화 - 안전 우선]\nAutonova의 내부 문화는 \"안전이 최종 거부권\"이라는 원칙으로 요약된다. 모든 자율주행 의사결정에 SafetyShield 검증이 통과해야 하고, 통과하지 못하면 어떤 기술적 우위도 적용하지 않는다는 원칙이다. 이 원칙은 Drive 자회사의 한수정 대표가 \"만도 시절부터 가지고 있던 신념\"이라며 회사 전체 문화로 확산시켰다. CEO 김지훈도 \"제품이 빨라지는 것보다 사고 한 번이 회사를 망친다\"는 입장을 일관되게 유지한다."
+  },
+  {
+    "chunk_index": 25,
+    "page_start": 26,
+    "category": "sensemaking",
+    "text": "[산업 포지셔닝 - 학계와 산업의 양대 모태]\nAutonova의 정체성은 두 모태의 결합으로 정의된다. KAIST 자율주행연구실은 \"학계 모태\"로서 알고리즘의 깊이를 제공하고, 현대자동차는 \"산업 모태\"로서 양산 노하우와 차량 플랫폼을 제공한다. 박서연 CTO가 KAIST 박사 출신, 김지훈 CEO가 현대 출신이라는 두 창업자의 배경이 이 결합의 출발점이다. 회사 내부에서는 \"우리는 학계의 깊이와 산업의 양산을 동시에 가진 유일한 한국 자율주행 회사\"라는 표현이 자주 쓰인다."
+  },
+  {
+    "chunk_index": 26,
+    "page_start": 27,
+    "category": "sensemaking",
+    "text": "[미래 방향 - Phase 3 양산]\nAutonova의 미래 방향은 Phase 3에서의 양산이다. 2026~2027년 강남과 판교에서 도심 실증 서비스를 운영하고, 현대자동차 차량 플랫폼과의 양산 통합을 동시에 진행한다. 회사 내부에서 \"Phase 3 양산이 곧 회사의 운명\"이라는 인식이 강하다. CEO 김지훈은 \"Phase 3 성공이 한국 자율주행 산업 전체의 가능성을 증명하는 일\"이라고 표현했다. Phase 3 이후는 글로벌 시장 진출이 다음 단계로 검토되고 있다."
+  },
+  {
+    "chunk_index": 27,
+    "page_start": 28,
+    "category": "sensemaking",
+    "text": "[가치관 종합 - 안전·단계·Edge]\nAutonova의 가치관은 세 단어로 요약된다. \"안전 우선, 단계적 확장, Edge 우선.\" 안전은 SafetyShield로, 단계적 확장은 Phase 1→2→3 구조로, Edge 우선은 차량 내 판단 원칙으로 구현된다. 이 세 가치관이 회사의 모든 기술·경영·인사 결정의 일관된 기준이다. 박서연과 김지훈은 \"세 가치 중 어느 하나도 양보하면 Autonova가 아니다\"라는 표현을 자주 사용한다. 직원 입사 교육에서도 이 세 가치관이 첫 시간 강의 주제다."
+  },
+  {
+    "chunk_index": 28,
+    "page_start": 29,
+    "category": "relation",
+    "text": "[관계 명시 - 박서연·정민호]\n박서연 CTO와 정민호 Vision 대표의 관계는 KAIST 사제 관계에서 출발한다. 박서연이 KAIST 교수 시절(2008~2014) 지도한 첫 박사과정 학생이 정민호이며, 둘은 KAIST 자율주행연구실에서 약 5년간 사제로 함께 연구했다. 정민호는 박사 졸업 후 LG전자를 거쳐 2019년 박서연의 요청으로 Autonova-Vision 초대 대표로 합류했다. 두 사람의 사제 관계는 현재까지도 Vision 자회사의 기술 의사결정 방향에 직접적 영향을 준다."
+  },
+  {
+    "chunk_index": 29,
+    "page_start": 30,
+    "category": "relation",
+    "text": "[관계 명시 - 박서연·강현우]\n강현우 Drive 제어팀장은 KAIST 시절 박서연 교수의 석사과정 학생이었다. 2015년 입학, 2017년 졸업으로 약 2년간 사제 관계였다. 졸업 후 만도에서 4년 근무했고, 만도 재직 중 한수정 (당시 만도 동료, 후의 Drive 대표)과 함께 일했다. 2021년 한수정이 Drive 대표로 영입된 직후 강현우를 제어팀장으로 합류시켰다. 강현우는 박서연의 직제자이자 한수정의 만도 동료라는 두 관계를 동시에 가지고 있다."
+  },
+  {
+    "chunk_index": 30,
+    "page_start": 31,
+    "category": "relation",
+    "text": "[관계 명시 - 김지훈·한수정 영입]\n한수정 Drive 대표의 영입은 김지훈 CEO가 직접 진행했다. 둘은 2018년 김지훈이 현대 자율주행팀 시절 만도와 공동 프로젝트를 했을 때 처음 만났다. 김지훈은 \"한수정 대표가 만도 시절 보여준 제어 시스템 설계 능력에 처음부터 깊은 인상을 받았다\"고 밝혔다. 한수정은 Drive 합류 후 자신의 만도 시절 동료 강현우를 KAIST 석사 졸업 시점에 영입했고, 이로 인해 강현우는 박서연과의 KAIST 사제 관계와 한수정과의 만도 동료 관계를 모두 갖게 되었다."
+  },
+  {
+    "chunk_index": 31,
+    "page_start": 32,
+    "category": "relation",
+    "text": "[관계 명시 - 정민호·최영민]\n최영민 Vision 카메라팀장은 정민호 대표의 직속 보고 라인에 있다. 최영민은 LG전자 카메라 부문에서 8년 근무 후 2020년 Autonova-Vision에 합류했다. 정민호 대표가 LG전자 재직 시절 알고 지냈던 인연으로 영입되었다. 카메라팀은 Vision 내에서 가장 큰 팀이며, 송지윤 연구원이 최영민의 직속 부하다. 최영민은 정민호에게 매주 1회 기술 보고를 하며, 정민호는 그 내용을 박서연 CTO와 공유하는 보고 체계가 정착되어 있다."
+  },
+  {
+    "chunk_index": 32,
+    "page_start": 33,
+    "category": "relation",
+    "text": "[관계 명시 - 강현우·임승호]\n임승호 Drive 연구원은 강현우 제어팀장의 직속 보고 라인에 있다. 임승호는 군산대학교를 졸업한 후 2022년 Drive에 합류했고, 강현우의 직속 부하로 PathPlanner-X 개발에 참여한다. 강현우는 \"임승호 연구원이 KAIST 출신이 아닌 첫 핵심 팀원\"이라며 KAIST 편중에서 벗어나기 위한 인사 결정이었다고 인터뷰에서 밝혔다. 임승호의 보고는 강현우를 거쳐 한수정 대표, 박서연 CTO 순서로 올라간다."
+  },
+  {
+    "chunk_index": 33,
+    "page_start": 34,
+    "category": "relation",
+    "text": "[관계 명시 - 김나래·오태경]\n오태경 Maps 연구원은 김나래 V2X 팀장의 직속 보고 라인에 있다. 다만 영입 자체는 윤재혁 대표가 카카오모빌리티 시절 함께 일한 인연으로 진행했고, 합류 후 김나래 팀에 배속된 형태다. 오태경은 V2X-Protocol 개발에 핵심 인력이며, 김나래의 삼성SDS 출신 백그라운드와 결합해 V2X팀의 실질적 두 축을 형성한다. 보고 라인은 오태경 → 김나래 → 윤재혁 → COO 이도현 순서로 올라간다."
+  },
+  {
+    "chunk_index": 34,
+    "page_start": 35,
+    "category": "classification",
+    "text": "[기술 카테고리 트리]\nAutonova의 핵심 기술은 다음 6개 카테고리로 분류된다.\n1. AI 모델: YOLO-Auto v3 (객체인식, Vision), LiDAR-Fusion-Net (센서퓨전, Vision)\n2. 알고리즘: PathPlanner-X (경로계획, Drive), SafetyShield (안전검증, Drive)\n3. SW: HD-Map-Engine (HD맵, Maps), Sim-Replay (시뮬레이션, Drive)\n4. 하드웨어: Edge AI Box (Vision+Drive 공동)\n5. 통신: V2X-Protocol (Maps), Cloud-Sync (Maps)\n6. 도구: Sensor-Calib (캘리브레이션, Vision)\n총 10개 컴포넌트가 6개 카테고리로 묶여 자율주행 시스템 전체를 구성한다."
+  },
+  {
+    "chunk_index": 35,
+    "page_start": 36,
+    "category": "classification",
+    "text": "[자회사 역할 매트릭스]\n자회사 셋의 역할은 자율주행 파이프라인의 단계별로 분류된다.\n- 인지(Perception) 단계: Autonova-Vision 담당. 카메라/LiDAR/Radar 센서로부터 환경을 인식.\n- 판단/제어(Planning & Control) 단계: Autonova-Drive 담당. 인지 결과를 받아 경로와 제어 명령 생성.\n- 맵/통신(Map & Comm) 단계: Autonova-Maps 담당. HD맵 제공 + V2X 통신으로 인지·판단 보조.\n본사는 세 자회사의 통합과 전략을 담당. 모든 자회사는 SafetyShield의 안전 검증 대상이다."
+  },
+  {
+    "chunk_index": 36,
+    "page_start": 37,
+    "category": "classification",
+    "text": "[프로젝트 Phase 구조 - 산출물 계층]\n메인 프로젝트는 3-Phase 구조로 산출물이 계층 정리된다.\n- Phase 1 (2022~2023, 완료): 인지 기술 산출물 — YOLO-Auto v3, LiDAR-Fusion-Net, Sensor-Calib. 주관 자회사 Vision.\n- Phase 2 (2024~2025, 진행): 판단·제어 산출물 — PathPlanner-X, SafetyShield, Sim-Replay + Edge AI Box (HW). 주관 자회사 Drive.\n- Phase 3 (2026~2027, 예정): 실증·양산 — HD-Map-Engine 강남/판교 확장, V2X-Protocol 양산, 현대 차량 통합. 주관 자회사 Maps.\nMaps의 HD-Map-Engine은 Phase 1~3 전 기간 지속 산출물로 분류된다."
+  },
+  {
+    "chunk_index": 37,
+    "page_start": 38,
+    "category": "classification",
+    "text": "[인물 직급 계층]\nAutonova 인물 12명의 직급은 4계층으로 분류된다.\n- C-Level (3명): CEO 김지훈, CTO 박서연, COO 이도현\n- 자회사 대표 (3명): 정민호(Vision), 한수정(Drive), 윤재혁(Maps)\n- 팀장 (3명): 최영민(Vision/카메라), 강현우(Drive/제어), 김나래(Maps/V2X)\n- 연구원 (3명): 송지윤(Vision), 임승호(Drive), 오태경(Maps)\n자회사별로 대표-팀장-연구원의 3계층이 평행 구성된다. 본사 C-Level은 자회사 대표 위에 위치한다."
+  },
+  {
+    "chunk_index": 38,
+    "page_start": 39,
+    "category": "classification",
+    "text": "[협력사 분류]\nAutonova의 외부 협력사는 두 분류로 나뉜다.\n- 학계 협력 (1곳): KAIST 자율주행연구실 — AI 알고리즘 공동연구, 인턴십, 졸업생 우선채용. 2018년 MoU 이후 지속.\n- 산업 협력 (1곳): 현대자동차 — 차량 플랫폼 공급, 양산 검증, Phase 3 공동개발. 2020년 MoU, 2022년 본계약.\n두 협력은 각각 박서연 CTO(학계)와 김지훈 CEO(산업)의 백그라운드에서 출발했다. 두 협력의 결합이 회사의 \"학계+산업 양대 모태\" 정체성을 형성한다."
+  },
+  {
+    "chunk_index": 39,
+    "page_start": 40,
+    "category": "classification",
+    "text": "[시스템 컴포넌트 아키텍처 계층]\n자율주행 전체 시스템은 4계층 아키텍처로 분류된다.\n- L1 인지 계층: 카메라/LiDAR/Radar 센서 → LiDAR-Fusion-Net → YOLO-Auto v3 객체인식. (Vision)\n- L2 판단 계층: 인지 결과 + HD맵 → PathPlanner-X 경로계획 → 의사결정. (Drive + Maps)\n- L3 검증 계층: SafetyShield 안전 검증 (모든 판단의 거부권). (Drive)\n- L4 실행 계층: Edge AI Box에서 최종 명령 생성 → 차량 제어. (Vision+Drive HW)\n외곽 보조: V2X-Protocol/Cloud-Sync (Maps) — L2 판단을 보조하지만 메인 경로 아님."
+  }
+]

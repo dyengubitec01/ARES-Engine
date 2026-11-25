@@ -1,0 +1,33 @@
+name: 28_aug_raptor
+description: |
+  보강 relation+sensemaking 19문 신호확정 (graphrag 약점유형). baseline vs 보조.
+techniques: [graphrag-router]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000_raptor.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_graphtypes.json
+
+categories: [relation_reasoning, sensemaking]
+
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20, max_index: 100000}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  raptor:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/28_aug_raptor

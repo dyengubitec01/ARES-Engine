@@ -1,0 +1,57 @@
+name: 14_realdomain
+description: |
+  실제 도메인(사내 사업 문서, 비공개, production_sample 53청크) 일반화 1차 검증.
+  채택 스택(R-5 multihop + A-3 critic) vs baseline lazy_qt.
+  ⚠️ 53청크는 작은 코퍼스 → top_k=8로 낮춰 회수 압력 생성(else R-5 재검색 무의미).
+  golden QA는 draft(production_qa.json) — 결과를 방향성으로만 해석, 답변으로 QA 역검증.
+  기대: 집계 문항(Q4·8 흩어진 정보)에서 R-5 효과, 환각트랩(14·15·16)에서 critic 효과.
+techniques: [R-5, A-3]
+gen_temperature: 0
+
+corpus: data/chunks/production_sample.json
+
+qa:
+  - data/qa/production_qa.json
+
+categories: null
+
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 8}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  multihop:
+    retriever: {type: multihop, top_k: 8, hop2_k: 4}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  multihop_critic:
+    retriever: {type: multihop, top_k: 8, hop2_k: 4}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+        - {type: verify, prompt: critic_relation}
+
+  multihop_gated:
+    retriever: {type: multihop, top_k: 8, hop2_k: 4}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+        - {type: critic_gated, prompt: critic_relation}
+
+output: results/14_realdomain

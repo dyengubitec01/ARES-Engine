@@ -1,0 +1,38 @@
+name: 08_subq
+description: |
+  기법 A-2(Sub-Question Decomposition). 질문을 sub-Q로 분해 → 각 sub-Q별 claim 추출 → 한 번에 종합.
+  baseline lazy_qt와의 유일 차이 = claim 추출을 sub-Q별 분할(relevance·reduce 동일) → 분해 순효과 격리.
+  관계/단순 질문은 decompose가 분해 안 함 → 환각 trap 영역은 baseline과 동일 행동(egroup 함정 회피).
+  가설: Tier-1 분산통합 Q5·6·8 + fanout Q21·23 잠식. 환각 영역 무해성도 동시 확인.
+techniques: [A-2]
+gen_temperature: 0   # 평가 결정론 (judge는 이미 temp=0)
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+
+categories: null
+
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  subq:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: subq_decompose
+      relevance_prompt: relevance_strict
+      decompose_prompt: subq_decompose
+      claim_prompt: claim_strict
+      reduce_prompt: system_baseline
+
+output: results/08_subq

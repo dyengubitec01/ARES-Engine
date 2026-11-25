@@ -1,0 +1,45 @@
+name: 41_mhg
+description: |
+  step5 기법③ R-5 Multi-hop + graph 통합 — 옛 robust 승자 R-5(LLM followup 재검색)를 그래프와 결합.
+  격리: vector / vplus(graph) / mhg(multihop+graph). 관건: R-5가 그래프에 보완되나(특히 relation·multi-hop), critic이 깎은 relation 회복하나.
+techniques: [graph_rag, R-5]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+  - data/qa/golden_qa_graphtypes.json
+
+categories: null
+exclude_ids: [11, 46]
+
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  vplus:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  mhg:
+    retriever: {type: multihop_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json, hop2_k: 5}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/41_mhg

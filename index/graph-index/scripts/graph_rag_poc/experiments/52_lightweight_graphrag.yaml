@@ -1,0 +1,49 @@
+name: 52_lightweight_graphrag
+description: |
+  경량 그래프RAG 본선 — 단일 확정 파이프라인 (조각난 캠페인 정리판).
+  exp50/51의 vplus_critic_route 트랙 = 양산 정직판 우승 조합만 남김.
+  치트 트랙(rlabel_critic_route: real-only 깨끗그래프, distractor 사전제거)은 폐기.
+  양산 16만엔 distractor가 없어 lazy ≈ 깨끗으로 수렴하므로 lazy 그래프가 정직 본선.
+
+  [본선 구성]
+  - 검색: vector_topk(20) + lazy_community 그래프 엔티티 라우팅  (GLiNER2, LLM 0회 빌드)
+  - 합성: relevance_filter → claim_extraction
+          → route_inject (A-1 라우팅: relation→관계요약 / global→커뮤니티요약)
+          → reduce → critic_gated (A-3)
+  메모: vector judge 대비 +0.048 (graphrag_integration_state, N=3).
+
+  [빌드 아티팩트 — 이미 생성됨, 재빌드 불필요]
+  - data/graphs/gliner2/lazy_community_1000.json   : GLiNER2 추출+공출현+Louvain (LLM 0)
+  - data/graphs/relation_summaries_real.json       : strict 관계요약 (청크당 LLM 1콜)
+  - data/graphs/community_summaries_real.json       : 커뮤니티 요약 (커뮤니티당 LLM 1콜)
+  ※ 양산 시: distractor 필터 제거하고 전체 코퍼스에 동일 빌드. relation_summaries가 ~7h 병목.
+techniques: [graph_rag, A-3, A-1, relation_summary, community_summary]
+gen_temperature: 0
+corpus: data/chunks/scaled_1000.json
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+  - data/qa/golden_qa_graphtypes.json
+categories: null
+exclude_ids: [11, 46]
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  lightweight:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: route_inject, relation_path: data/graphs/relation_summaries_real.json, community_path: data/graphs/community_summaries_real.json}
+        - {type: reduce, prompt: system_baseline}
+        - {type: critic_gated, prompt: critic_relation}
+output: results/52_lightweight_graphrag

@@ -1,0 +1,38 @@
+name: 10_hybrid
+description: |
+  기법 R-2 (Hybrid Search: dense BGE + sparse BM25). 회수 풀 자체를 바꾸는 첫 기법.
+  synthesizer는 baseline과 동일(relevance→claim→reduce) → retriever 변경(vector_topk vs hybrid) 순효과만 격리.
+  가설: dense가 놓치는 엔티티명·고유명사 정확매칭 청크를 BM25가 보강 → 분산통합·fanout 회수 누락 완화.
+  alpha=0.7 (dense 0.7 / sparse 0.3). chunk_recall 변화가 핵심 신호.
+techniques: [R-2]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+
+categories: null
+
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  lazy_qt_hybrid:
+    retriever: {type: hybrid, top_k: 20, alpha: 0.7}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/10_hybrid

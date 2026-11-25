@@ -1,0 +1,31 @@
+name: 22_graphkhop
+description: |
+  기법 R-8 (Graph Expansion k-hop). GLiNER2 공출현 그래프에서 시드 엔티티 2-hop 확장 → 청크 회수.
+  baseline lazy_qt(vector_topk) vs graph_khop(hops=2). exp04(1-hop 그래프 라우팅 패배) 연장.
+  예상: hop↑로 노이즈↑ → net 부정. 데이터 완성용.
+techniques: [R-8]
+gen_temperature: 0
+corpus: data/chunks/scaled_1000.json
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+categories: null
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  graph_khop:
+    retriever: {type: graph_khop, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json, top_entities: 12, hops: 2}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+output: results/22_graphkhop

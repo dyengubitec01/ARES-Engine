@@ -1,0 +1,38 @@
+name: 36_graph_canon
+description: |
+  정규화 그래프 효과 측정 (변형병합) — vector vs vector+graph(정밀). 라우팅·rerank 없음(순수 정밀화 효과 격리).
+  정밀 graph_rag: 시드 엔티티 포함 + focus(시드비중)로 랭킹 → 일반 목록청크·distractor 억제, 관계청크 우대.
+  비교 기준: run33(구 graph_rag)에서 vplus가 vector 대비 −0.020(희석). 정밀화로 희석 줄었나?
+techniques: [graph_rag-precise]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+  - data/qa/golden_qa_graphtypes.json
+
+categories: null
+exclude_ids: [11, 46]
+
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  vplus:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000_canon.json}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/36_graph_canon

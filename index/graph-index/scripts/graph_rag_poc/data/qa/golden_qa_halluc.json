@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "purpose": "환각함정 표본 확대 — lazy_qt의 '관계 날조 억제' 강점 확정용 (기존 3문 → +12문)",
+    "domain": "가상 자율주행 스타트업 Autonova",
+    "total_questions": 12,
+    "note": "모두 hallucination_trap. 직접적 사제/동료/영입/보고 관계가 정말 없는 쌍. 정답=관계 없음. must_not_contain=날조 시 나올 거짓 관계어. id 29~40 (golden_qa 1~20, fanout 21~28 다음)."
+  },
+  "qa_set": [
+    {
+      "id": 29,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 타 자회사 팀장",
+      "question": "김나래 Maps V2X 팀장과 강현우 Drive 제어팀장은 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 김나래는 삼성SDS 출신으로 윤재혁이 영입한 Maps 라인, 강현우는 KAIST/만도 출신으로 한수정 산하 Drive 라인. 서로 다른 자회사의 팀장이며 직접적 사제·동료·영입·보고 관계는 자료에 없음.",
+      "required_chunks": [3, 29, 30, 33],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "지도", "직제자", "동료", "영입", "같은 팀", "직속", "함께 근무"]
+    },
+    {
+      "id": 30,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 타 자회사 대표",
+      "question": "정민호 Vision 대표와 윤재혁 Maps 대표는 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 정민호는 박서연의 KAIST 직제자로 영입된 Vision 라인, 윤재혁은 네이버/카카오 출신으로 이도현이 영입한 Maps 라인. 둘 다 자회사 대표라는 공통점만 있고 직접적 사제·동료·영입 관계는 자료에 없음.",
+      "required_chunks": [18, 20, 28],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "지도", "직제자", "동료", "영입", "함께 근무", "함께 창업"]
+    },
+    {
+      "id": 31,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 타 자회사 연구원",
+      "question": "송지윤 Vision 연구원과 임승호 Drive 연구원은 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 송지윤은 Vision 인턴 출신으로 최영민 직속, 임승호는 군산대 출신으로 강현우 직속. 서로 다른 자회사의 연구원이며 직접적 관계는 자료에 없음.",
+      "required_chunks": [16, 31, 32],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "동료", "같은 팀", "직속", "함께 근무", "영입"]
+    },
+    {
+      "id": 32,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 타 자회사 팀장",
+      "question": "최영민 Vision 카메라팀장과 김나래 Maps V2X 팀장은 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 최영민은 LG전자 출신으로 정민호 직속 Vision 라인, 김나래는 삼성SDS 출신으로 윤재혁이 영입한 Maps 라인. 서로 다른 자회사의 팀장이며 직접적 관계는 자료에 없음.",
+      "required_chunks": [3, 31, 33],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "동료", "영입", "같은 팀", "직속", "함께 근무"]
+    },
+    {
+      "id": 33,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 타 자회사 대표",
+      "question": "한수정 Drive 대표와 윤재혁 Maps 대표는 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 한수정은 만도 출신으로 김지훈이 영입한 Drive 라인, 윤재혁은 네이버/카카오 출신으로 이도현이 영입한 Maps 라인. 둘 다 자회사 대표라는 공통점만 있고 직접적 사제·동료·영입 관계는 자료에 없음.",
+      "required_chunks": [19, 20, 30],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "동료", "영입", "함께 근무", "만도", "같은"]
+    },
+    {
+      "id": 34,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 팀장 vs 타 자회사 연구원",
+      "question": "강현우 Drive 제어팀장과 오태경 Maps 연구원은 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 강현우는 KAIST/만도 출신 Drive 제어팀장, 오태경은 카카오모빌리티 출신으로 윤재혁이 영입해 김나래 직속인 Maps 연구원. 서로 다른 자회사이며 직접적 관계는 자료에 없음.",
+      "required_chunks": [29, 32, 33],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "동료", "영입", "직속", "같은 팀", "함께 근무"]
+    },
+    {
+      "id": 35,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - CTO vs 타 라인 팀장",
+      "question": "박서연 CTO와 김나래 Maps V2X 팀장은 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 박서연은 KAIST 출신으로 Vision/Drive 기술 라인(정민호·강현우)과 연결되고, 김나래는 삼성SDS 출신으로 윤재혁이 영입한 Maps 라인. 두 사람 사이 직접적 사제·동료·영입 관계는 자료에 없음.",
+      "required_chunks": [3, 15, 28, 33],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "지도", "직제자", "영입", "동료", "함께 근무"]
+    },
+    {
+      "id": 36,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 타 자회사 연구원",
+      "question": "임승호 Drive 연구원과 오태경 Maps 연구원은 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 임승호는 군산대 출신으로 강현우 직속 Drive 라인, 오태경은 카카오모빌리티 출신으로 김나래 직속 Maps 라인. 서로 다른 자회사의 연구원이며 직접적 관계는 자료에 없음.",
+      "required_chunks": [32, 33],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "동료", "같은 팀", "직속", "함께 근무", "영입"]
+    },
+    {
+      "id": 37,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 대표 vs 타 자회사 연구원",
+      "question": "정민호 Vision 대표와 임승호 Drive 연구원은 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 정민호는 박서연 직제자인 Vision 대표, 임승호는 군산대 출신으로 강현우 직속인 Drive 연구원. 서로 다른 자회사이며 직접적 사제·영입·보고 관계는 자료에 없음.",
+      "required_chunks": [28, 32],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "지도", "영입", "직속", "동료", "함께 근무"]
+    },
+    {
+      "id": 38,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 타 자회사 팀장 vs 연구원",
+      "question": "최영민 Vision 카메라팀장과 오태경 Maps 연구원은 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 최영민은 LG전자 출신 Vision 카메라팀장(정민호 직속), 오태경은 카카오모빌리티 출신 Maps 연구원(김나래 직속). 서로 다른 자회사이며 직접적 관계는 자료에 없음.",
+      "required_chunks": [31, 33],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "동료", "영입", "직속", "같은 팀", "함께 근무"]
+    },
+    {
+      "id": 39,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 타 자회사 연구원 vs 팀장",
+      "question": "송지윤 Vision 연구원과 김나래 Maps V2X 팀장은 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 송지윤은 Vision 인턴 출신으로 최영민 직속, 김나래는 삼성SDS 출신으로 윤재혁이 영입한 Maps V2X 팀장. 서로 다른 자회사이며 직접적 관계는 자료에 없음.",
+      "required_chunks": [3, 16, 33],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "동료", "영입", "직속", "같은 팀", "함께 근무"]
+    },
+    {
+      "id": 40,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정 - 제어팀장 vs 타 자회사 대표",
+      "question": "강현우 Drive 제어팀장과 윤재혁 Maps 대표는 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 강현우는 KAIST/만도 출신으로 한수정 산하 Drive 제어팀장, 윤재혁은 네이버/카카오 출신으로 이도현이 영입한 Maps 대표. 서로 다른 자회사이며 직접적 사제·동료·영입 관계는 자료에 없음.",
+      "required_chunks": [20, 29, 30],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "동료", "영입", "직속", "함께 근무"]
+    }
+  ]
+}

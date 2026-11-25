@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: registry.example.com/ares/frontend:latest
+    container_name: frontend-react
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - alloy
+
+  alloy:
+    image: grafana/alloy:v1.6.0
+    container_name: frontend-alloy
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+    environment:
+      LOKI_URL: ${LOKI_URL}
+      APP_ENV: prod
+      APP_HOST: app-server
+    volumes:
+      - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+    restart: always

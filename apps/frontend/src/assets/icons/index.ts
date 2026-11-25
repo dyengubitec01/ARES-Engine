@@ -1,0 +1,23 @@
+// 아이콘 에셋 배럴 파일
+export { default as bugIcon } from './bug.svg';
+export { default as copyIcon } from './copy.svg';
+export { default as docUserIcon } from './doc-user.svg';
+export { default as feedbackIcon } from './feedback.svg';
+export { default as helpCircleIcon } from './help-circle.svg';
+export { default as headerIcon } from './header-icon.svg';
+export { default as loginImage } from './login-image.svg';
+export { default as logoGif } from './newchat-logo.gif';
+export { default as logoutIcon } from './logout.svg';
+export { default as profileIcon } from './profile.svg';
+export { default as submitIcon } from './submit.svg';
+export { default as toastFailedIcon } from './toast-failed.svg';
+export { default as toastSuccessIcon } from './toast-success.svg';
+export { default as toastWarningIcon } from './toast-warning.svg';
+export { default as viewMoreIcon } from './more.svg';
+export { default as toggleIcon } from './toggle.svg';
+export { default as docIcon } from './doc.svg';
+export { default as docEmbeddingIcon } from './doc-embedding.svg';
+export { default as notificationFillIcon } from './notification-fill.svg';
+export { default as pageNextIcon } from './page-next.svg';
+export { default as pageLastIcon } from './page-last.svg';
+export { default as notificationColorIcon } from './notification-color.svg';

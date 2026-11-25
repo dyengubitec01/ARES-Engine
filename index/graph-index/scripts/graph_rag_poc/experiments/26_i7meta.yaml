@@ -1,0 +1,29 @@
+name: 26_i7meta
+description: |
+  기법 I-7 변형 (Corpus Pre-Summarization, K²RAG 기반). Lazy(풀 청크)는 그대로 + 요약에서 뽑은
+  엔티티 디스크립션30 + 커뮤니티 요약11을 '참고 메타데이터'로 회수 풀에 추가(단순 버전).
+  corpus=scaled_1000_i7meta(원1000+메타41). baseline=vector(chunks only, max_index=200000) vs i7meta(메타 포함).
+  가설: 엔티티/관계 디스크립션이 관계·집계 질문에 도움? (압축 손실로 환각 위험은 있음)
+techniques: [I-7]
+gen_temperature: 0
+corpus: data/chunks/scaled_1000_i7meta.json
+qa: [data/qa/golden_qa.json, data/qa/golden_qa_fanout.json, data/qa/golden_qa_halluc.json]
+categories: null
+tracks:
+  baseline:
+    retriever: {type: vector_topk, top_k: 20, max_index: 200000}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  i7meta:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+output: results/26_i7meta

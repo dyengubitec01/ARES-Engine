@@ -1,0 +1,98 @@
+// Grafana Alloy 설정 - Faro 수신 → 백엔드 스타일로 변환 → Loki 전송
+// 컨테이너 안 /etc/alloy/config.alloy 로 마운트됨
+
+faro.receiver "frontend" {
+  server {
+    listen_address       = "0.0.0.0"
+    listen_port          = 12347
+    cors_allowed_origins = ["*"]
+  }
+
+  output {
+    logs = [loki.process.frontend.receiver]
+  }
+}
+
+loki.process "frontend" {
+  forward_to = [loki.write.default.receiver]
+
+  // 1) logfmt 필드 추출 (정보 보존을 위해 확장)
+  stage.logfmt {
+    mapping = {
+      "kind"                      = "",
+      "event_name"                = "",
+      "timestamp"                 = "",
+      "level"                     = "",
+      "message"                   = "",
+      "type"                      = "",
+      "value"                     = "",
+      "page_url"                  = "",
+      "browser_name"              = "",
+      "browser_version"           = "",
+      "browser_os"                = "",
+      "browser_viewportWidth"     = "",
+      "browser_viewportHeight"    = "",
+      "browser_language"          = "",
+      "session_id"                = "",
+      "app_name"                  = "",
+      "app_version"               = "",
+      "app_environment"           = "",
+      "sdk_version"               = "",
+      "user_id"                   = "",
+      "user_email"                = "",
+      "user_attr_name"            = "",
+      "user_attr_deptId"          = "",
+      "user_attr_authorities"     = "",
+      "context_rating"            = "",
+      "context_interaction_target" = "",
+      "event_data_method"         = "",
+      "event_data_url"            = "",
+      "event_data_status"         = "",
+      "event_data_backendMessage" = "",
+      "event_data_backendCode"    = "",
+      "event_data_name"           = "",
+      "event_data_responseStatus" = "",
+      "event_data_duration"       = "",
+      "event_data_initiatorType"  = "",
+    }
+  }
+
+  // 2) Faro UTC timestamp를 Loki entry timestamp로 설정 (Grafana 표시 시간 정확화)
+  stage.timestamp {
+    source = "timestamp"
+    format = "2006-01-02 15:04:05.000 -0700 MST"
+  }
+
+  // 3) timestamp 짧은 형태 (UTC, [DATE] 토큰용)
+  stage.regex {
+    source     = "timestamp"
+    expression = "^(?P<ts_short>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})"
+  }
+
+  // 4) page_url에서 path만 추출
+  stage.regex {
+    source     = "page_url"
+    expression = "^https?://[^/]+(?P<page_path>/[^?#]*)"
+  }
+
+  // 5) 라인 재작성
+  stage.template {
+    source   = "line"
+    template = `{{- if and (eq .kind "event") (eq .event_name "api_error") -}}[SERVICE] frontend | [DATE] {{ dateInZone "2006-01-02 15:04:05" (toDate "2006-01-02 15:04:05.000 -0700 MST" .timestamp) "Asia/Seoul" }} | [USER] {{ if .user_id }}{{ .user_id }}{{ if .user_attr_name }}({{ .user_attr_name }}){{ end }}{{ else }}-{{ end }} | [METHOD] {{ .event_data_method }} | [URL] {{ .event_data_url }} | [HANDLER] - | [REQ] - | [RES] {{ if .event_data_backendMessage }}{{ .event_data_backendMessage }}{{ else if .event_data_backendCode }}{{ .event_data_backendCode }}{{ else }}-{{ end }} | [STATUS] {{ .event_data_status }} | [TIME] - | [PAGE] {{ if .page_path }}{{ .page_path }}{{ else }}-{{ end }} | [SESSION] {{ .session_id }} | [BROWSER] {{ .browser_name }} {{ .browser_version }}/{{ .browser_os }} | [VIEWPORT] {{ .browser_viewportWidth }}x{{ .browser_viewportHeight }} | [BUILD] {{ .app_version }} | [SDK] {{ .sdk_version }}{{- else -}}[APP-LOG] [DATE] {{ dateInZone "2006-01-02 15:04:05" (toDate "2006-01-02 15:04:05.000 -0700 MST" .timestamp) "Asia/Seoul" }} | [LEVEL] {{ if eq .kind "exception" }}ERROR{{ else if eq .kind "measurement" }}INFO{{ else if .level }}{{ ToUpper .level }}{{ else }}INFO{{ end }} | [CONTEXT] {{ if eq .kind "log" }}Console{{ else if eq .kind "exception" }}Exception{{ else if eq .kind "measurement" }}WebVitals:{{ .type }}{{ else if eq .kind "event" }}Event:{{ .event_name }}{{ else }}{{ .kind }}{{ end }} | [MSG] {{ if eq .kind "exception" }}{{ .type }}: {{ .value }}{{ else if eq .kind "measurement" }}{{ .type }}={{ .value }}{{ if .context_rating }} rating={{ .context_rating }}{{ end }}{{ if .context_interaction_target }} target={{ .context_interaction_target }}{{ end }}{{ else if eq .kind "event" }}{{ if eq .event_name "faro.performance.resource" }}{{ .event_data_initiatorType }} {{ .event_data_name }} status={{ .event_data_responseStatus }} duration={{ .event_data_duration }}ms{{ else }}{{ .event_name }}{{ end }}{{ else if .message }}{{ .message }}{{ else }}-{{ end }} | [USER] {{ if .user_id }}{{ .user_id }}{{ if .user_attr_name }}({{ .user_attr_name }}){{ end }}{{ else }}-{{ end }} | [PAGE] {{ if .page_path }}{{ .page_path }}{{ else }}-{{ end }} | [SESSION] {{ .session_id }} | [BROWSER] {{ .browser_name }} {{ .browser_version }}/{{ .browser_os }} | [VIEWPORT] {{ .browser_viewportWidth }}x{{ .browser_viewportHeight }} | [BUILD] {{ .app_version }} | [SDK] {{ .sdk_version }}{{- end -}}`
+  }
+
+  stage.output {
+    source = "line"
+  }
+}
+
+loki.write "default" {
+  endpoint {
+    url = sys.env("LOKI_URL")
+  }
+  external_labels = {
+    job         = "frontend-react",
+    environment = sys.env("APP_ENV"),
+    host        = sys.env("APP_HOST"),
+  }
+}

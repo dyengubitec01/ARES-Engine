@@ -1,0 +1,39 @@
+name: 33_vector_plus_graph
+description: |
+  통합 프레임 (always-both, 라우팅 없음) — vector vs vector+graph_rag, 50문.
+  목적: 운영 벡터RAG에 그래프RAG를 '더하면' 더 좋아지나?
+  성공 = 그래프유리(relation/sensemaking) 회복 + 무회귀(control/distributed/multilayer/fanout/trap, 특히 환각).
+  골든셋 50 = 전체 52 − Q11(단일청크=벡터유리) − Q46(Q16과 중복).
+techniques: [vector_plus_graph]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+  - data/qa/golden_qa_graphtypes.json
+
+categories: null
+exclude_ids: [11, 46]
+
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  vector_plus_graph:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json, top_entities: 8, hops: 2, max_path_len: 3, use_community: true}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/33_vector_plus_graph

@@ -1,0 +1,8 @@
+# Graph_RAG_Index (graph add-on) runtime dependencies.
+#
+# base(Vector_RAG_Index) code (config/models/embeddings/db/chunking, etc.) is provided by:
+#   - production: Dockerfile.graph inherits the base image (FROM .../ew[-dev])
+#   - local dev: install base as editable  ->  pip install -e ../Vector_RAG_Index
+# Keep only graph-specific extra dependencies here (no overlap with base requirements).
+
+networkx>=3.1

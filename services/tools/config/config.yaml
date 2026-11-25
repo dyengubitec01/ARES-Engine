@@ -1,0 +1,27 @@
+# TOL Application Configuration
+# 환경별 설정은 config.{env}.yaml로 오버라이드 가능
+
+app:
+  name: "TOL"
+  description: "전사 공유형 AI 기능 거점"
+
+# 기본 LLM 설정 (models.yaml에서 상세 정의)
+llm:
+  max_tokens: 512
+  temperature: 0.4
+  default_timeout: 30
+  connect_timeout: 10
+  max_retries: 3
+  retry_backoff_factor: 2
+
+# 로깅 설정
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# 스코핑 설정
+scoping:
+  allowed_scopes:
+    - "agent"
+    - "backend"
+    - "frontend"

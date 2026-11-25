@@ -1,0 +1,126 @@
+{
+  "_comment": "그래프RAG 약점유형 신호 확정용 보강 QA (2026-06-05). relation_reasoning·sensemaking 각 6문 추가(id 41~52). 모두 golden_40 real 청크 근거. [[graphrag-must-integrate]] 라우터 검증용.",
+  "qa_set": [
+    {
+      "id": 41,
+      "category": "relation_reasoning",
+      "subtype": "관계 추론 - 보고라인 + 입사배경 통합",
+      "question": "송지윤 연구원의 직속 상사는 누구이고, 어떤 배경으로 입사했으며, 그의 보고는 최종적으로 누구에게까지 올라가는가?",
+      "expected_answer": "송지윤은 Vision 카메라팀 소속으로 최영민 팀장의 직속 부하다. Vision 인턴 출신으로 정직원이 된 첫 케이스다. 보고 라인은 송지윤 → 최영민 → 정민호(Vision 대표) → 박서연 CTO로 올라간다.",
+      "required_chunks": [16, 31],
+      "answer_must_contain": ["최영민", "인턴", "정민호"],
+      "answer_must_not_contain": ["강현우"],
+      "evaluation_notes": "16(인턴 첫 케이스)+31(최영민 직속·보고체계) 통합 필요. 단일 청크로 안 풀림."
+    },
+    {
+      "id": 42,
+      "category": "relation_reasoning",
+      "subtype": "관계 추론 - KAIST 연관성 대비",
+      "question": "강현우 제어팀장과 그의 부하 임승호 연구원은 KAIST 연관성 측면에서 어떻게 다른가?",
+      "expected_answer": "강현우는 박서연 CTO의 KAIST 석사 직제자(2015 입학, 2017 졸업)다. 반면 임승호는 군산대 졸업으로 'KAIST 출신이 아닌 첫 핵심 팀원'이며, 강현우는 이를 KAIST 편중에서 벗어나기 위한 인사 결정이라고 밝혔다. 둘 다 Drive 소속이고 임승호는 강현우의 직속 부하다.",
+      "required_chunks": [29, 32],
+      "answer_must_contain": ["강현우", "KAIST", "임승호", "군산대"],
+      "evaluation_notes": "29(강현우 KAIST 제자)+32(임승호 군산대·비KAIST) 대비 추론."
+    },
+    {
+      "id": 43,
+      "category": "relation_reasoning",
+      "subtype": "관계 추론 - 영입 인연 + 보고 경로",
+      "question": "최영민 카메라팀장은 어떻게 Autonova에 합류했고, 그의 기술 보고는 어떤 경로로 박서연 CTO까지 전달되는가?",
+      "expected_answer": "최영민은 LG전자 카메라 부문에서 8년 근무 후 2020년 Vision에 합류했다. 정민호 대표가 LG전자 재직 시절의 인연으로 영입했다. 최영민은 정민호에게 매주 1회 기술 보고를 하고, 정민호가 그 내용을 박서연 CTO와 공유한다.",
+      "required_chunks": [1, 31],
+      "answer_must_contain": ["LG전자", "정민호", "박서연"],
+      "evaluation_notes": "1(최영민 LG 출신)+31(정민호 영입·보고체계)."
+    },
+    {
+      "id": 44,
+      "category": "relation_reasoning",
+      "subtype": "관계 추론 - 영입 인연 + 연쇄 영입",
+      "question": "한수정 Drive 대표는 누구에 의해 어떤 인연으로 영입되었고, 합류 후 누구를 데려왔는가?",
+      "expected_answer": "한수정은 만도에서 12년 근무한 제어 베테랑이다. 김지훈 CEO가 현대 자율주행팀 시절 만도와 공동 프로젝트를 하며 실력을 확인하고 직접 영입(2020)했다. 한수정은 합류 후 만도 시절 동료였던 강현우를 KAIST 석사 졸업 시점에 Drive 제어팀장으로 영입했다.",
+      "required_chunks": [19, 30],
+      "answer_must_contain": ["만도", "김지훈", "강현우"],
+      "evaluation_notes": "19(한수정 만도·김지훈 영입·강현우 영입)+30(현대-만도 공동프로젝트 인연)."
+    },
+    {
+      "id": 45,
+      "category": "relation_reasoning",
+      "subtype": "관계 추론 - 창업자 만남 경로",
+      "question": "김지훈 CEO와 박서연 CTO는 어떻게 처음 만나 공동창업에 이르렀는가?",
+      "expected_answer": "2017년 한 자율주행 학회에서 박서연이 센서퓨전 논문을 발표했고, 김지훈이 발표를 듣고 명함을 건넸다. 당시 김지훈은 현대 자율주행팀(5년), 박서연은 KAIST 박사 후 미국 Waymo 인지팀에 있었다. 이듬해(2018) 함께 귀국해 Autonova를 공동 창업했다.",
+      "required_chunks": [8, 15],
+      "answer_must_contain": ["학회", "센서퓨전", "Waymo"],
+      "evaluation_notes": "8(2017 학회·명함)+15(박서연 Waymo·2018 귀국 창업)."
+    },
+    {
+      "id": 46,
+      "category": "relation_reasoning",
+      "subtype": "관계 추론 - 영입주체와 보고상사 불일치",
+      "question": "오태경 연구원의 영입을 주도한 사람과 현재 직속 상사가 다른 이유는 무엇이며, 그의 보고 라인은?",
+      "expected_answer": "영입은 윤재혁 대표가 카카오모빌리티 시절 함께 일한 동료 인연으로 진행했으나, 합류 후 김나래 V2X팀에 배속되었다. 그래서 영입 주체(윤재혁)와 직속 상사(김나래)가 다르다. 보고 라인은 오태경 → 김나래 → 윤재혁 → COO 이도현 순이다.",
+      "required_chunks": [20, 33],
+      "answer_must_contain": ["윤재혁", "카카오모빌리티", "김나래", "이도현"],
+      "evaluation_notes": "20(윤재혁 영입·오태경 카카오 동료)+33(김나래 직속·보고라인)."
+    },
+    {
+      "id": 47,
+      "category": "sensemaking",
+      "subtype": "광범위 sensemaking - 가치관 종합",
+      "question": "Autonova가 모든 기술·경영·인사 결정의 기준으로 삼는 세 가지 가치관은 무엇이고 각각 무엇으로 구현되는가?",
+      "expected_answer": "'안전 우선, 단계적 확장, Edge 우선' 세 가치다. 안전은 SafetyShield(최종 거부권)로, 단계적 확장은 Phase 1→2→3 구조로, Edge 우선은 차량 내 판단 원칙으로 구현된다. 세 가치 중 하나라도 양보하면 Autonova가 아니라는 표현을 쓴다.",
+      "required_chunks": [23, 24, 27],
+      "answer_must_contain": ["안전", "단계", "Edge"],
+      "evaluation_notes": "27(3가치 종합)+23(Edge)+24(안전) 통합. 광범위 종합."
+    },
+    {
+      "id": 48,
+      "category": "sensemaking",
+      "subtype": "광범위 sensemaking - 철학+아키텍처 통합",
+      "question": "Autonova의 'Edge AI 우선주의' 철학의 내용과 근거, 그리고 그것이 시스템 설계에 어떻게 반영됐는지 종합하면?",
+      "expected_answer": "핵심 판단을 차량 내 Edge AI Box에서 처리하고 클라우드 의존을 최소화하며 V2X는 보조 수단으로만 쓴다. 근거는 '네트워크는 불안정해도 안전 판단은 늦으면 안 된다'는 것이다. 이 철학은 SafetyShield 설계와 Vision·Drive 공동 개발 Edge AI Box로 구현됐고, 시스템 아키텍처상 V2X/Cloud-Sync는 메인 경로가 아닌 외곽 보조다.",
+      "required_chunks": [23, 39],
+      "answer_must_contain": ["Edge", "클라우드", "V2X", "보조"],
+      "evaluation_notes": "23(철학)+39(아키텍처 V2X 외곽보조) 통합."
+    },
+    {
+      "id": 49,
+      "category": "sensemaking",
+      "subtype": "광범위 sensemaking - 문화 유래+작동",
+      "question": "Autonova의 '안전이 최종 거부권' 문화는 어디서 비롯되었고 시스템상 어떻게 작동하는가?",
+      "expected_answer": "모든 자율주행 의사결정은 SafetyShield 검증을 통과해야 하며, 통과하지 못하면 어떤 기술적 우위도 적용하지 않는다. 이 원칙은 Drive의 한수정 대표가 만도 시절부터 가진 신념을 회사 전체 문화로 확산시킨 것이다. 김지훈 CEO도 '사고 한 번이 회사를 망친다'는 입장이다. 아키텍처상 L3 검증 계층(SafetyShield)이 모든 판단의 거부권을 갖는다.",
+      "required_chunks": [24, 39],
+      "answer_must_contain": ["SafetyShield", "거부권", "한수정", "만도"],
+      "evaluation_notes": "24(문화·한수정 유래)+39(L3 검증 거부권)."
+    },
+    {
+      "id": 50,
+      "category": "sensemaking",
+      "subtype": "광범위 sensemaking - 미래 전략 종합",
+      "question": "Autonova의 미래 방향을 Phase 3와 그 이후까지 종합하면?",
+      "expected_answer": "Phase 3(2026~2027)에서 강남·판교 도심 실증 서비스와 현대자동차 차량 플랫폼 양산 통합을 동시에 진행한다. 회사 내부에서 'Phase 3 양산이 곧 회사의 운명'으로 인식된다. Phase 3 이후로는 글로벌 시장 진출이 다음 단계로 검토되고 있다.",
+      "required_chunks": [7, 26],
+      "answer_must_contain": ["Phase 3", "양산", "현대", "글로벌"],
+      "evaluation_notes": "26(Phase3·글로벌)+7(Phase 구조)."
+    },
+    {
+      "id": 51,
+      "category": "sensemaking",
+      "subtype": "광범위 sensemaking - 창업자 배경 반영",
+      "question": "두 창업자의 서로 다른 배경이 Autonova의 외부 협력과 전략에 각각 어떻게 반영되었는가?",
+      "expected_answer": "박서연 CTO는 KAIST 박사 출신(학계)으로, KAIST 자율주행연구실 협력과 알고리즘 깊이, 센서융합·Edge 신념의 원천이다. 김지훈 CEO는 현대 자율주행팀 출신(산업)으로, 현대차 협력과 양산 노하우, '의사결정 속도' 문제의식(3-자회사 분리·Edge 우선 전략의 근거)의 원천이다. 두 배경의 결합이 '학계+산업 양대 모태' 정체성을 형성한다.",
+      "required_chunks": [14, 25, 38],
+      "answer_must_contain": ["박서연", "KAIST", "김지훈", "현대", "학계", "산업"],
+      "evaluation_notes": "14(김지훈 현대→Edge·3자회사 근거)+25(양대모태)+38(협력사 출발). 매우 분산."
+    },
+    {
+      "id": 52,
+      "category": "sensemaking",
+      "subtype": "광범위 sensemaking - 시스템 계층 종합",
+      "question": "Autonova의 자율주행 시스템 전체가 어떤 계층 구조로 구성되며 각 계층을 어느 자회사가 맡는지 종합하면?",
+      "expected_answer": "4계층이다. L1 인지(Vision: 센서→LiDAR-Fusion-Net→YOLO-Auto v3), L2 판단(Drive+Maps: 인지결과+HD맵→PathPlanner-X 경로계획), L3 검증(Drive: SafetyShield 안전검증, 모든 판단의 거부권), L4 실행(Vision+Drive: Edge AI Box에서 최종 명령→차량 제어). V2X-Protocol/Cloud-Sync(Maps)는 외곽 보조다.",
+      "required_chunks": [35, 39],
+      "answer_must_contain": ["인지", "판단", "검증", "실행"],
+      "evaluation_notes": "39(4계층 아키텍처)+35(자회사 역할 매트릭스)."
+    }
+  ]
+}

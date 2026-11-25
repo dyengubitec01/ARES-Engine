@@ -1,0 +1,35 @@
+name: 19_multistage
+description: |
+  기법 R-6 (Multi-Stage Retrieval, 비그래프 순차판). dense 광범위(stage1_k=30) → BM25 재정렬 → top_k.
+  baseline lazy_qt(vector_topk)와 retriever만 차이, synthesizer 동일. 회수 retriever 비교.
+  예상: R-2(병렬 hybrid, 기각)·R-7(rerank, 기각)과 동류라 net 부정~중립. 데이터 완성용.
+techniques: [R-6]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+categories: null
+
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  multistage:
+    retriever: {type: multistage, top_k: 20, stage1_k: 30}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/19_multistage

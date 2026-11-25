@@ -1,0 +1,8 @@
+# Development Environment Overrides
+
+logging:
+  level: "DEBUG"
+
+llm:
+  default_timeout: 60
+  max_retries: 1

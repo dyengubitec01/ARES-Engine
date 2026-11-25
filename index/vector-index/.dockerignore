@@ -1,0 +1,14 @@
+.git
+.idea
+.vscode
+__pycache__
+*.pyc
+venv
+tests
+*.env
+kafka-data
+minio-data
+pgdata
+qdrant-data
+zookeeper-data
+zookeeper-log

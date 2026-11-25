@@ -1,0 +1,27 @@
+{
+  "golden_set": {
+    "source": "사내 문서 청크 약 16만 건(비공개)",
+    "questions": 81,
+    "types": {"entity_aggregation": 46, "single_fact": 35},
+    "generator": "LLM 자동 생성(문서 근거 질문 + 정답 청크)",
+    "metric": "recall@10",
+    "measured": "2026-06-25"
+  },
+  "by_method_build4": {
+    "entity_aggregation": {"n": 46, "vector": 0.284, "graph": 0.488, "hybrid": 0.581},
+    "single_fact": {"n": 35, "vector": 0.629, "graph": 0.171, "hybrid": 0.686},
+    "overall": {"n": 81, "vector": 0.433, "graph": 0.351, "hybrid": 0.627},
+    "entity_aggregation_wins": {"graph": 28, "vector": 15, "tie": 3}
+  },
+  "technique_tests_build5": {
+    "baseline_hybrid_overall": 0.617,
+    "measured": "2026-06-26",
+    "tests": [
+      {"technique": "entity_idf_routing", "decision": "adopted", "note": "by_method_build4의 그래프 방식"},
+      {"technique": "synonym_resolution", "hybrid_overall_before": 0.611, "hybrid_overall_after": 0.617, "delta": 0.006, "decision": "rejected"},
+      {"technique": "document_curation", "hybrid_overall_before": 0.617, "hybrid_overall_after": 0.617, "delta": 0.0, "decision": "rejected"},
+      {"technique": "query_ngram_fallback", "hybrid_overall_before": 0.617, "hybrid_overall_after": 0.620, "delta": 0.003, "decision": "rejected"},
+      {"technique": "graph_candidates_vector_rerank", "hybrid_overall_before": 0.617, "hybrid_overall_after": 0.543, "delta": -0.074, "decision": "rejected"}
+    ]
+  }
+}

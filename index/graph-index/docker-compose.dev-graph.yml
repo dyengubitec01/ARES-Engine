@@ -1,0 +1,38 @@
+# 그래프 빌드 배치 (dev) — Jenkins(Jenkinsfile.dev-graph)가 ew-graph-dev 이미지 빌드·푸시·배포.
+# EW와 같은 패턴이되 1회성 배치(restart:no, up -d 아님). 실행 = 호스트 cron(21시) 또는 수동:
+#   docker compose -f docker-compose.dev-graph.yml run --rm graph-build
+# env는 EW(dev-ew.yml) 관행대로 하드코딩. GRAPH_DB=dev (ragdb_dev/rag_dev).
+services:
+  graph-build:
+    image: registry.example.com/ares/ew-graph-dev:${EW_IMAGE_TAG:-latest}
+    restart: "no"
+    deploy:                              # EW 프로덕션과 공존 → 자원 캡 (21시 저부하 권장)
+      resources:
+        limits: { cpus: '4', memory: 8G }
+        reservations: { cpus: '1', memory: 2G }
+    environment:
+      TZ: "Asia/Seoul"                   # 로그 타임스탬프 KST(UTC+9). 미설정시 컨테이너 기본 UTC.
+      # 사내 데이터스토어 (LAN)
+      POSTGRES_HOST: "localhost"
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: "raguser"
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: "ragdb"               # prod 모드일 때만 사용 (dev 모드는 ragdb_dev 강제)
+      POSTGRES_SCHEMA: "rag"
+      QDRANT_HOST: "localhost"
+      QDRANT_PORT: "6333"
+      BGE_M3_API_URL: "http://localhost:4000/v1/embeddings"
+      BGE_M3_API_KEY: ${BGE_M3_API_KEY}
+      BGE_M3_MODEL_NAME: "embed-bge-m3"
+      # 클라우드 GPU API (KT Cloud NEXUS, 인터넷 outbound)
+      GLINER_API_URL: "http://localhost:8001"
+      GLINER_API_KEY: ${GLINER_API_KEY}
+      GEMMA_API_URL: "http://localhost:8000"
+      GEMMA_API_KEY: ${GEMMA_API_KEY}
+      # 파이프라인 파라미터 (dev)
+      GRAPH_DB: "dev"
+      GRAPH_LIMIT: "300"          # 스모크 테스트: build_graph 청크 300개로 제한. 전체 빌드시 이 줄 삭제/주석.
+      MAX_EDGES: "50"
+    volumes:
+      - ./logs:/app/logs
+    command: ["bash", "scripts/graph_build/run_pipeline.sh"]

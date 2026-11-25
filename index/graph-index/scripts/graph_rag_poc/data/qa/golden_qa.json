@@ -1,0 +1,227 @@
+{
+  "meta": {
+    "purpose": "Lazy RAG 쓸모 판별 PoC - Golden Q&A 20문",
+    "domain": "가상 자율주행 스타트업 Autonova",
+    "total_questions": 20,
+    "distribution": {
+      "control_vector_sufficient": 4,
+      "distributed_integration_lazy_strength": 5,
+      "sensemaking_lazy_strength": 3,
+      "relation_reasoning_full_only": 4,
+      "multilayer_classification_full_only": 4
+    },
+    "evaluation_dimensions": [
+      "answer_accuracy (사실 일치도 0~1)",
+      "required_chunks_recall (필수 청크 회수 비율)",
+      "answer_completeness (정답 요소 누락 여부)",
+      "structural_quality (질문 의도에 맞는 답변 구조)",
+      "token_cost (input + output)"
+    ]
+  },
+  "qa_set": [
+    {
+      "id": 1,
+      "category": "control",
+      "subtype": "Vector RAG로 충분 - 단일 사실 회수",
+      "question": "Autonova의 CEO는 누구인가?",
+      "expected_answer": "김지훈",
+      "required_chunks": [0],
+      "answer_must_contain": ["김지훈"],
+      "evaluation_notes": "Chunk 0 회수만 되면 누구나 답 가능. Vector RAG 강한 영역."
+    },
+    {
+      "id": 2,
+      "category": "control",
+      "subtype": "Vector RAG로 충분 - 단일 사실",
+      "question": "Autonova-Vision 자회사는 어디에 위치하는가?",
+      "expected_answer": "대전",
+      "required_chunks": [1],
+      "answer_must_contain": ["대전"],
+      "evaluation_notes": "Chunk 1에 명확히 명시."
+    },
+    {
+      "id": 3,
+      "category": "control",
+      "subtype": "Vector RAG로 충분 - 단일 사실",
+      "question": "현대자동차와 본계약을 체결한 연도는?",
+      "expected_answer": "2022년 3월",
+      "required_chunks": [5],
+      "answer_must_contain": ["2022"],
+      "evaluation_notes": "Chunk 5에 명시. MoU(2020)와 본계약(2022) 구분 필요."
+    },
+    {
+      "id": 4,
+      "category": "control",
+      "subtype": "Vector RAG로 충분 - 단일 사실",
+      "question": "Phase 1 완료가 공식 발표된 날짜는?",
+      "expected_answer": "2023년 12월 18일",
+      "required_chunks": [6],
+      "answer_must_contain": ["2023", "12월"],
+      "evaluation_notes": "Chunk 6에 명시. 정확한 날짜 인용 가능."
+    },
+
+    {
+      "id": 5,
+      "category": "distributed_integration",
+      "subtype": "분산통합 - 인물 경력 종합 (Lazy 잠재 강점)",
+      "question": "김지훈 CEO가 Autonova를 창업하기 전 어떤 경력을 가지고 있었는지 모두 정리해줘.",
+      "expected_answer": "현대자동차 자율주행팀에서 5년간 근무, 차량 플랫폼 통합 책임자 역할",
+      "required_chunks": [8, 14, 17],
+      "answer_must_contain": ["현대", "자율주행팀", "5년", "차량 플랫폼"],
+      "evaluation_notes": "한 청크로는 부족. chunk 8(창업 동기), 14(현대 시절 5년), 17(통합 책임자 역할)을 종합해야 정답. Vector RAG가 약할 가능성 큼."
+    },
+    {
+      "id": 6,
+      "category": "distributed_integration",
+      "subtype": "분산통합 - 인물 경력 종합",
+      "question": "박서연 CTO의 학계·산업 경력을 모두 알려줘.",
+      "expected_answer": "KAIST 박사 졸업(2014, 이종 센서 융합 박사논문), KAIST 교수(2008~2014), 미국 Waymo 인지팀 근무, 2018년 김지훈과 Autonova 공동창업",
+      "required_chunks": [0, 9, 15, 28],
+      "answer_must_contain": ["KAIST", "박사", "Waymo", "공동창업"],
+      "evaluation_notes": "박서연 경력이 chunks 0·9·15·28에 분산. KAIST 교수 역할은 chunk 28에서만 언급. Waymo는 chunk 15에서만."
+    },
+    {
+      "id": 7,
+      "category": "distributed_integration",
+      "subtype": "분산통합 - 자회사 성과 종합",
+      "question": "Autonova-Vision이 Phase 1 기간 동안 달성한 기술 성과를 모두 정리해줘.",
+      "expected_answer": "YOLO-Auto v3 객체인식 모델(정확도 96.4%), LiDAR-Fusion-Net 센서융합, Sensor-Calib 캘리브레이션 도구. 야간 인식 23% 향상도 후속 성과.",
+      "required_chunks": [1, 6, 10, 36],
+      "answer_must_contain": ["YOLO-Auto v3", "LiDAR-Fusion-Net", "96.4%"],
+      "evaluation_notes": "chunks 1(기술 명단), 6(정확도 수치), 10(야간 23% 향상), 36(Phase 1 산출물 계층)에 분산."
+    },
+    {
+      "id": 8,
+      "category": "distributed_integration",
+      "subtype": "분산통합 - 협력 관계 종합",
+      "question": "Autonova와 KAIST의 협력에서 나온 구체적 결과들을 모두 알려줘.",
+      "expected_answer": "MoU 2018년 12월 체결 후 매년 갱신, AI 알고리즘 공동연구, 인턴십 프로그램, 졸업생 우선채용권, 연간 공동연구비 15억 원, KAIST 출신 직원 22% 비중, 공동 IP 보유. 박서연 직제자 정민호·강현우 영입 등.",
+      "required_chunks": [4, 13, 15, 18, 25, 38],
+      "answer_must_contain": ["MoU", "공동연구", "인턴십", "15억"],
+      "evaluation_notes": "정보가 6개 청크에 광범위 분산. 사회 통합 답변에 그래프 라우팅이 진짜 필요할 케이스."
+    },
+    {
+      "id": 9,
+      "category": "distributed_integration",
+      "subtype": "분산통합 - 인물 영입 경로",
+      "question": "정민호 Vision 대표가 Autonova에 합류하기 전 어떤 경로를 거쳤고, 왜 합류했나?",
+      "expected_answer": "KAIST에서 박서연 지도 하에 박사학위 취득(2016년 박사) → LG전자 근무 → 2019년 박서연의 요청으로 Autonova-Vision 초대 대표 합류.",
+      "required_chunks": [13, 15, 18, 28],
+      "answer_must_contain": ["KAIST", "LG", "2019", "박서연"],
+      "evaluation_notes": "정민호 정보는 chunks 13(2023 인사), 15(KAIST 시절), 18(KAIST 직제자 첫 박사), 28(LG 거쳐 영입)에 분산."
+    },
+
+    {
+      "id": 10,
+      "category": "sensemaking",
+      "subtype": "광범위 sensemaking - 전략 종합 (Lazy 잠재 강점)",
+      "question": "Autonova의 핵심 전략과 철학을 정리해줘.",
+      "expected_answer": "세 가지 핵심: (1) 3-자회사 분리(인지/판단/맵 deep tech 집중), (2) Edge AI 우선주의(클라우드 의존 최소화), (3) 안전 우선(SafetyShield 거부권). 단계적 확장(Phase 1→2→3) + 학계·산업 양대 모태 결합도 핵심 정체성.",
+      "required_chunks": [22, 23, 24, 25, 27],
+      "answer_must_contain": ["3-자회사", "Edge AI", "안전", "단계적"],
+      "evaluation_notes": "여러 sensemaking 청크의 통합. Microsoft가 Lazy로 빛난 영역. Lazy가 강해야 하는 질문."
+    },
+    {
+      "id": 11,
+      "category": "sensemaking",
+      "subtype": "광범위 sensemaking - 의사결정 근거",
+      "question": "Autonova가 자회사 셋으로 분리한 이유는?",
+      "expected_answer": "자율주행 복잡도가 너무 커서 한 회사가 모든 분야를 deep tech 수준으로 다 잘하기 불가능하다는 판단. 각 자회사가 독립 기술 의사결정권을 가져 의사결정 속도가 약 3배 빨라짐. 박서연 CTO의 핵심 신념.",
+      "required_chunks": [22],
+      "answer_must_contain": ["복잡", "deep tech", "의사결정"],
+      "evaluation_notes": "chunk 22에 거의 자기완결적 정보. Vector RAG도 가능할 수 있음. Sensemaking이지만 정보 집중."
+    },
+    {
+      "id": 12,
+      "category": "sensemaking",
+      "subtype": "광범위 sensemaking - 정체성 추론",
+      "question": "Autonova가 '학계와 산업의 양대 모태'라는 정체성을 가지게 된 근거는 무엇인가?",
+      "expected_answer": "두 창업자의 배경(박서연 KAIST 박사 학계 출신, 김지훈 현대자동차 산업 출신)이 핵심. 이 배경에서 두 외부 협력(KAIST 자율주행연구실, 현대자동차)이 형성되었고, 학계의 알고리즘 깊이 + 산업의 양산 노하우가 결합된 회사 구조.",
+      "required_chunks": [0, 4, 5, 21, 25, 38],
+      "answer_must_contain": ["박서연", "KAIST", "김지훈", "현대", "학계", "산업"],
+      "evaluation_notes": "정보가 매우 광범위 분산. 본질을 묶는 추론이 필요. Lazy/Full 차이가 드러날 좋은 케이스."
+    },
+
+    {
+      "id": 13,
+      "category": "relation_reasoning",
+      "subtype": "관계 추론 - 직접 사제 관계 (Full 전용)",
+      "question": "박서연 CTO와 강현우 Drive 제어팀장은 어떤 관계인가?",
+      "expected_answer": "KAIST 사제 관계. 박서연이 KAIST 교수 시절 강현우의 석사과정 지도교수였음(2015 입학, 2017 졸업). 강현우는 박서연의 직제자.",
+      "required_chunks": [15, 18, 29],
+      "answer_must_contain": ["KAIST", "사제", "석사", "지도"],
+      "evaluation_notes": "관계 라벨이 있어야 잘 답함. Full 우위 예상."
+    },
+    {
+      "id": 14,
+      "category": "relation_reasoning",
+      "subtype": "관계 추론 - 다중 라인 관계 (Full 전용)",
+      "question": "강현우는 박서연·한수정 두 사람과 각각 어떤 관계인가?",
+      "expected_answer": "박서연과는 KAIST 사제 관계(석사 지도교수-학생). 한수정과는 만도 시절 동료 관계. 강현우가 KAIST 졸업 후 만도에서 한수정과 함께 일했고, 한수정이 Drive 대표로 영입된 후 강현우를 영입함. 두 관계가 동시 존재.",
+      "required_chunks": [18, 19, 29, 30],
+      "answer_must_contain": ["KAIST", "사제", "만도", "동료"],
+      "evaluation_notes": "두 관계의 동시 존재를 명확히 답해야 함. Lazy는 관계 라벨 없어 어려움."
+    },
+    {
+      "id": 15,
+      "category": "relation_reasoning",
+      "subtype": "관계 추론 - 간접 영향 (Full 전용)",
+      "question": "박서연 CTO가 직접 또는 간접적으로 영향력을 미치는 인물을 모두 정리하면?",
+      "expected_answer": "직접 사제: 정민호(Vision 대표, KAIST 박사 지도), 강현우(Drive 제어팀장, KAIST 석사 지도). 간접: 정민호 → 최영민(Vision 카메라팀장, 정민호 영입). 강현우 → 임승호(Drive 연구원, 강현우 영입). 송지윤(Vision 인턴 출신, 최영민 직속). 본사에서는 김지훈과 공동 의사결정 라인.",
+      "required_chunks": [15, 18, 28, 29, 31, 32],
+      "answer_must_contain": ["정민호", "강현우", "최영민"],
+      "evaluation_notes": "관계 체인 추론이 필수. Vector RAG는 거의 못 풀고 Lazy도 약함. Full만 가능 예상."
+    },
+    {
+      "id": 16,
+      "category": "relation_reasoning",
+      "subtype": "관계 추론 - 영입 경로",
+      "question": "오태경 연구원이 Autonova에 영입된 경로는 누구를 통해서이며, 현재 보고 라인은?",
+      "expected_answer": "윤재혁 대표가 카카오모빌리티 시절 직접 함께 일한 동료로서 영입. 합류 후 김나래 V2X 팀에 배속. 현재 보고 라인은 오태경 → 김나래 → 윤재혁 → COO 이도현 순.",
+      "required_chunks": [20, 33],
+      "answer_must_contain": ["윤재혁", "카카오모빌리티", "김나래", "이도현"],
+      "evaluation_notes": "두 청크의 정보 통합 + 영입자와 보고라인 구분 필요."
+    },
+
+    {
+      "id": 17,
+      "category": "multilayer_classification",
+      "subtype": "다층 분류 - 기술 카테고리 (Full 전용)",
+      "question": "Autonova의 모든 기술 컴포넌트를 카테고리별로 정리해줘.",
+      "expected_answer": "6 카테고리, 10 컴포넌트. 1) AI 모델: YOLO-Auto v3, LiDAR-Fusion-Net (Vision). 2) 알고리즘: PathPlanner-X, SafetyShield (Drive). 3) SW: HD-Map-Engine, Sim-Replay. 4) 하드웨어: Edge AI Box (Vision+Drive). 5) 통신: V2X-Protocol, Cloud-Sync (Maps). 6) 도구: Sensor-Calib (Vision).",
+      "required_chunks": [34],
+      "answer_must_contain": ["AI 모델", "알고리즘", "SW", "하드웨어", "통신", "도구"],
+      "evaluation_notes": "chunk 34에 카테고리 정보 자기완결. 다만 카테고리 형식으로 답하는 게 핵심. Full 우위는 형식 측면일 가능성."
+    },
+    {
+      "id": 18,
+      "category": "multilayer_classification",
+      "subtype": "다층 분류 - 자회사 역할",
+      "question": "Autonova 자회사 셋의 역할을 자율주행 파이프라인 단계별로 분류하면?",
+      "expected_answer": "인지(Perception): Autonova-Vision (카메라/LiDAR/Radar 환경 인식). 판단/제어(Planning & Control): Autonova-Drive (경로계획, 안전검증). 맵/통신(Map & Comm): Autonova-Maps (HD맵, V2X). 본사는 통합·전략 담당. SafetyShield는 모든 자회사의 검증 대상.",
+      "required_chunks": [1, 2, 3, 35],
+      "answer_must_contain": ["인지", "판단", "Vision", "Drive", "Maps"],
+      "evaluation_notes": "chunk 35에 분류 정보. 자회사별 디테일(1,2,3) 합치면 더 풍부."
+    },
+    {
+      "id": 19,
+      "category": "multilayer_classification",
+      "subtype": "다층 분류 - Phase 산출물",
+      "question": "메인 프로젝트의 각 Phase별 산출물을 계층적으로 정리해줘.",
+      "expected_answer": "Phase 1 (2022~2023, 완료, Vision 주관): YOLO-Auto v3, LiDAR-Fusion-Net, Sensor-Calib. Phase 2 (2024~2025, 진행, Drive 주관): PathPlanner-X, SafetyShield, Sim-Replay + Edge AI Box. Phase 3 (2026~2027, 예정, Maps 주관): HD-Map-Engine 강남/판교 확장, V2X-Protocol 양산, 현대 차량 통합. HD-Map-Engine은 전 Phase 지속.",
+      "required_chunks": [6, 7, 36],
+      "answer_must_contain": ["Phase 1", "Phase 2", "Phase 3", "YOLO-Auto", "PathPlanner-X"],
+      "evaluation_notes": "Phase별 산출물 + 주관 자회사 + 기간을 계층화. Full의 디스크립션이 도움될 수 있음."
+    },
+    {
+      "id": 20,
+      "category": "multilayer_classification",
+      "subtype": "다층 분류 - 인물 직급 계층",
+      "question": "Autonova의 모든 인물 12명을 직급 계층별로 정리하면?",
+      "expected_answer": "4계층. C-Level (3): CEO 김지훈, CTO 박서연, COO 이도현. 자회사 대표 (3): 정민호(Vision), 한수정(Drive), 윤재혁(Maps). 팀장 (3): 최영민(Vision/카메라), 강현우(Drive/제어), 김나래(Maps/V2X). 연구원 (3): 송지윤(Vision), 임승호(Drive), 오태경(Maps).",
+      "required_chunks": [37],
+      "answer_must_contain": ["C-Level", "대표", "팀장", "연구원"],
+      "evaluation_notes": "chunk 37에 자기완결. 다만 12명 누락 없이 정리하는지가 평가 기준."
+    }
+  ]
+}

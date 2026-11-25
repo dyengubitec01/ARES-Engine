@@ -1,0 +1,37 @@
+name: 04_lazy_qt_routed
+description: |
+  lazy_qt + 그래프 라우팅 (풀 LazyGraphRAG).
+  GLiNER2 lazy 그래프(공출현 커뮤니티)로 후보 선정 → 같은 lazy 합성.
+  vector_routed(그래프 후보 + 단일 생성)도 함께 측정해 "라우팅 순효과" 격리.
+  결과(2026-05-30): lazy_qt_routed 0.882 < lazy_qt(임베딩) 0.904. 라우팅 추가 가치 없음.
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+
+categories: null
+
+tracks:
+  vector_routed:
+    retriever:
+      type: graph_v2
+      top_k: 20
+      graph: data/graphs/gliner2/lazy_community_1000.json
+      top_entities: 12
+    synthesizer: {type: single_shot, system_prompt: system_baseline}
+  lazy_qt_routed:
+    retriever:
+      type: graph_v2
+      top_k: 20
+      graph: data/graphs/gliner2/lazy_community_1000.json
+      top_entities: 12
+    synthesizer:
+      type: lazy_filter_claim
+      relevance_prompt: relevance_strict
+      claim_prompt: claim_strict
+      reduce_prompt: system_baseline
+
+output: results/04_lazy_qt_routed

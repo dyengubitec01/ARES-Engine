@@ -1,0 +1,62 @@
+# RAG embedding pipeline dependencies
+
+# Python version
+# Python 3.11+
+
+# Web framework (ER - Embedding Request Server)
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# Kafka
+kafka-python>=2.0.2
+confluent-kafka>=2.3.0
+
+# Database
+psycopg2-binary>=2.9.9
+sqlalchemy>=2.0.23
+alembic>=1.12.1
+
+# Vector DB
+qdrant-client>=1.7.0
+
+# Object storage
+minio>=7.2.0
+boto3>=1.29.0
+
+# HTTP client (for BGE-M3 remote API calls)
+requests>=2.31.0
+
+# File parsing
+Pillow>=10.0.0  # image processing (upscale OCR input images)
+PyMuPDF>=1.23.0  # PDF (fallback)
+pdfminer.six>=20231228  # pdfplumber compatibility (avoid textract pulling an old version)
+pdfplumber>=0.11.0  # PDF (pdfminer.six based, strong CMap parsing for HWP->PDF docs)
+python-docx>=1.1.0  # DOCX
+openpyxl>=3.1.2  # XLSX
+xlrd>=2.0.1  # XLS
+python-pptx>=0.6.23  # PPTX
+gethwp>=1.1.1  # HWP/HWPX (text only, no page info)
+
+# Optional dependencies (Windows local development only)
+# python-hwpx>=2.8.3  # HWP/HWPX (COM automation, includes page info, needs Windows + Hangul app)
+# note: production server (Linux) uses LibreOffice, so python-hwpx is not needed
+# textract>=1.6.5  # DOC, PPT (legacy format support, optional)
+# note: textract requires xlrd~=1.2.0 which conflicts with xlrd>=2.0.1.
+# install separately or adjust the xlrd version if needed.
+# pywin32>=306  # DOC/PPT support on Windows (optional, Windows only)
+
+# Utilities
+python-multipart>=0.0.6
+httpx>=0.25.0
+tenacity>=8.2.3  # retry logic
+
+# Logging and monitoring
+structlog>=23.2.0
+
+# Dev tools
+pytest>=7.4.3
+pytest-asyncio>=0.21.1
+black>=23.11.0
+mypy>=1.7.0

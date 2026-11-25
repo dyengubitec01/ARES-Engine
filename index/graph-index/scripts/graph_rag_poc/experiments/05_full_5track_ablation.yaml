@@ -1,0 +1,46 @@
+name: 05_full_5track_ablation
+description: |
+  최종 5트랙 ablation (1000청크) — Phase 5 검증 종합.
+  vector / vector_pro / vector_routed / lazy_qt / lazy_qt_routed 한 번에 비교.
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+
+categories: null
+
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer: {type: single_shot, system_prompt: system_baseline}
+  vector_pro:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer: {type: single_shot, system_prompt: pro_v1}
+  vector_routed:
+    retriever:
+      type: graph_v2
+      top_k: 20
+      graph: data/graphs/gliner2/lazy_community_1000.json
+    synthesizer: {type: single_shot, system_prompt: system_baseline}
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: lazy_filter_claim
+      relevance_prompt: relevance_strict
+      claim_prompt: claim_strict
+      reduce_prompt: system_baseline
+  lazy_qt_routed:
+    retriever:
+      type: graph_v2
+      top_k: 20
+      graph: data/graphs/gliner2/lazy_community_1000.json
+    synthesizer:
+      type: lazy_filter_claim
+      relevance_prompt: relevance_strict
+      claim_prompt: claim_strict
+      reduce_prompt: system_baseline
+
+output: results/05_full_5track_ablation

@@ -1,0 +1,35 @@
+name: 21_answertype
+description: |
+  기법 R-9 (Answer Type Prediction). 답 유형 예측 → 유형 인지 필터로 후보 선별.
+  baseline의 relevance_filter를 answer_type_filter로 대체(격리). 둘 다 vector_topk.
+  예상: 정밀도/필터 축(R-7 기각)과 동류 → net 중립~부정. 데이터 완성용.
+techniques: [R-9]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+categories: null
+
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  answer_type:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: answer_type_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/21_answertype

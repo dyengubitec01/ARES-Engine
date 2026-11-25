@@ -1,0 +1,29 @@
+name: 50_integrated_labeled
+description: |
+  최종 통합 — 이긴 기법 전부(graph_rag + A-3 Critic + A-1 라우팅 구조주입) + 관계라벨 깨끗그래프.
+  lazy(co-occur·84%distractor) vs labeled(real 관계엣지만) 비교, 둘 다 풀스택.
+  4트랙(50문, temp=0): vector / vplus_critic_route(lazy·현best) / rlabel_critic_route(labeled·통합) / rlabel_critic(라벨그래프+critic, 라우팅 없이).
+techniques: [graph_rag, A-3, A-1, relation_label, relation_summary, community_summary]
+gen_temperature: 0
+corpus: data/chunks/scaled_1000.json
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+  - data/qa/golden_qa_graphtypes.json
+categories: null
+exclude_ids: [11, 46]
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer: {type: pipeline, stages: [{type: relevance_filter, prompt: relevance_strict}, {type: claim_extraction, prompt: claim_strict}, {type: reduce, prompt: system_baseline}]}
+  vplus_critic_route:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json}
+    synthesizer: {type: pipeline, stages: [{type: relevance_filter, prompt: relevance_strict}, {type: claim_extraction, prompt: claim_strict}, {type: route_inject, relation_path: data/graphs/relation_summaries_real.json, community_path: data/graphs/community_summaries_real.json}, {type: reduce, prompt: system_baseline}, {type: critic_gated, prompt: critic_relation}]}
+  rlabel_critic_route:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/relation_labeled_real.json}
+    synthesizer: {type: pipeline, stages: [{type: relevance_filter, prompt: relevance_strict}, {type: claim_extraction, prompt: claim_strict}, {type: route_inject, relation_path: data/graphs/relation_summaries_real.json, community_path: data/graphs/community_summaries_real.json}, {type: reduce, prompt: system_baseline}, {type: critic_gated, prompt: critic_relation}]}
+  rlabel_critic:
+    retriever: {type: vector_plus_graph, top_k: 20, graph: data/graphs/relation_labeled_real.json}
+    synthesizer: {type: pipeline, stages: [{type: relevance_filter, prompt: relevance_strict}, {type: claim_extraction, prompt: claim_strict}, {type: reduce, prompt: system_baseline}, {type: critic_gated, prompt: critic_relation}]}
+output: results/50_integrated_labeled

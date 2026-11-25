@@ -1,0 +1,43 @@
+# Model Role Definitions (Test Configuration)
+# 로컬 테스트용 모델 설정 - Ollama 로컬 모델 사용
+# 사용법: MODEL_CONFIG_PATH=config/models.test.yaml python -m uvicorn main:app --reload
+
+roles:
+  primary:
+    model: "qwen2.5:7b"
+    server: "primary"
+    fallback_role: "fallback"
+    description: "메인 비즈니스 로직, 일반 대화 (로컬 테스트용)"
+
+  fallback:
+    model: "qwen2.5:3b"
+    server: "primary"  # 로컬에서는 같은 서버 사용
+    fallback_role: null
+    description: "장애 발생 시 비상 대응 (로컬 테스트용)"
+
+  fast:
+    model: "qwen2.5:3b"
+    server: "primary"
+    fallback_role: "primary"
+    description: "단순 요약, 분류, 키워드 추출"
+
+  reasoning:
+    model: "qwen2.5:7b"
+    server: "primary"
+    fallback_role: "primary"
+    description: "복잡한 법률 해석, 심층 추론 (로컬 테스트용)"
+
+  auxiliary:
+    model: "qwen2.5:3b"
+    server: "primary"
+    fallback_role: "fast"
+    description: "다국어 처리 및 보조 업무 (로컬 테스트용)"
+
+servers:
+  primary:
+    base_url_env: "PRIMARY_LLM_BASE_URL"
+  secondary:
+    base_url_env: "SECONDARY_LLM_BASE_URL"
+
+# Graceful Degradation 메시지
+fallback_message: "현재 서비스가 일시적으로 불안정합니다. 잠시 후 다시 시도해 주세요."

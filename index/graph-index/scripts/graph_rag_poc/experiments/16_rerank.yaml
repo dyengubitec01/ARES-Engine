@@ -1,0 +1,38 @@
+name: 16_rerank
+description: |
+  기법 R-7 (LLM listwise Reranking). 회수 풀을 관련도순 재정렬→상위 top_n 유지(precision↑).
+  R-5(multihop)와 다른 축(recall vs precision). 격리: R-5 vs R-5+rerank (multihop 풀 동일, rerank stage 유무만).
+  가설: R-5가 넓힌 풀의 노이즈를 rerank가 쳐내 Q8 과포함·집계 정밀도 개선. 효과 작을 수 있어 N=3 확인.
+techniques: [R-5, R-7]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+
+categories: null
+
+tracks:
+  multihop:
+    retriever: {type: multihop, top_k: 20, hop2_k: 5}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  multihop_rerank:
+    retriever: {type: multihop, top_k: 20, hop2_k: 5}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: rerank, prompt: rerank_relevance, top_n: 12}
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/16_rerank

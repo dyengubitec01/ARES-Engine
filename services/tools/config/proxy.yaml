@@ -1,0 +1,16 @@
+# TOL 외부 API 프록시 설정
+# 프록시 대상 API 목록, 타임아웃, 재시도 정책 관리
+
+proxy:
+  defaults:
+    timeout: 5.0
+    max_retries: 2
+
+  targets:
+    - name: "geocoding"
+      base_url: "https://maps.googleapis.com/maps/api/geocode"
+      description: "Google Geocoding API — 주소 → 좌표 변환"
+      timeout: 3.0
+      max_retries: 1
+      headers:
+        Accept: "application/json"

@@ -1,0 +1,38 @@
+name: 17_hyde
+description: |
+  기법 A-7 (HyDE). 질문→가상답변 생성→임베딩→1차 회수 시드. R-5(multihop) 위에 HyDE 시드 추가.
+  격리: multihop(R-5, 원질문 시드) vs multihop+hyde(가상답변 시드), 둘 다 followup re-retrieval 동일.
+  가설: 답변형 임베딩이 정답 청크에 더 가까워 회수 개선 → R-5 위에 추가 이득? (R-5와 같은 recall축이라 겹칠 위험).
+  효과 작을 수 있어 신호 보고 N=3 판단.
+techniques: [R-5, A-7]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+
+categories: null
+
+tracks:
+  multihop:
+    retriever: {type: multihop, top_k: 20, hop2_k: 5, use_hyde: false}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  multihop_hyde:
+    retriever: {type: multihop, top_k: 20, hop2_k: 5, use_hyde: true}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/17_hyde

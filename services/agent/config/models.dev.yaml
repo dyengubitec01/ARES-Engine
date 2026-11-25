@@ -1,0 +1,43 @@
+# Model Role Definitions
+# DESIGN_SPEC.md Section 4.2 기반
+# 코드에서는 역할(Role)로만 호출, 모델명은 여기서 관리
+
+roles:
+  primary:
+    model: "chat-gemma-27b"
+    server: "primary"
+    fallback_role: "fallback"
+    description: "메인 비즈니스 로직, 일반 대화"
+
+  fallback:
+    model: "chat-gpt-oss-20b"
+    server: "secondary"
+    fallback_role: null
+    description: "장애 발생 시 비상 대응"
+
+  fast:
+    model: "chat-llama-8b"
+    server: "primary"
+    fallback_role: "primary"
+    description: "단순 요약, 분류, 키워드 추출"
+
+  reasoning:
+    model: "chat-deepseek-r1-14b"
+    server: "primary"
+    fallback_role: "primary"
+    description: "복잡한 법률 해석, 심층 추론"
+
+  auxiliary:
+    model: "chat-glm4-9b"
+    server: "primary"
+    fallback_role: "fast"
+    description: "다국어 처리 및 보조 업무"
+
+servers:
+  primary:
+    base_url_env: "PRIMARY_LLM_BASE_URL"
+  secondary:
+    base_url_env: "SECONDARY_LLM_BASE_URL"
+
+# Graceful Degradation 메시지
+fallback_message: "현재 서비스가 일시적으로 불안정합니다. 잠시 후 다시 시도해 주세요."

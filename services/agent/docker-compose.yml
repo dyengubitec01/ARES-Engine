@@ -1,0 +1,24 @@
+services:
+  agent:
+    image: registry.example.com/ares/agent:latest
+    container_name: agent
+    ports:
+      - "${PORT:-8000}:8000"
+    # Jenkins 배포 시 credential이 .env로 SCP됨
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "10"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3

@@ -1,0 +1,30 @@
+name: 02_vector_pro
+description: vector + 운영급 강화 프롬프트(pro_v1). vector_strict, vector_verify와 함께 1콜 vs 1콜 vs 2콜 비교.
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+
+categories: null
+
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer: {type: single_shot, system_prompt: system_baseline}
+  vector_strict:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer: {type: single_shot, system_prompt: strict_b1}
+  vector_pro:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer: {type: single_shot, system_prompt: pro_v1}
+  vector_verify:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: verify
+      draft_prompt: system_baseline
+      verify_prompt: verify_v1
+
+output: results/02_vector_pro

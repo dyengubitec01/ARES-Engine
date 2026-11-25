@@ -1,0 +1,38 @@
+/* created by ARES team [2025-12-15] */
+/* 1. 스크롤바 전체 설정 */
+::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+::-webkit-scrollbar-track {
+background: transparent;
+  }
+  
+/* 3. 핸들(움직이는 부분)은 평소에 투명하게 */
+::-webkit-scrollbar-thumb {
+background: transparent; 
+border-radius: 10px;
+transition: background 0.3s ease;
+  }
+
+*:hover::-webkit-scrollbar-thumb {
+background: rgba(0, 0, 0, 0.1);
+  }
+  
+::-webkit-scrollbar-thumb:hover {
+background: rgba(0, 0, 0, 0.2) !important;
+  }
+
+::-webkit-scrollbar-button {
+display: none;
+  }
+
+/* 채팅 대화내역 스크롤바 숨김 */
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -1,0 +1,20 @@
+services:
+  deepeval-runner:
+    build: .
+    container_name: deepeval-runner
+    networks:
+      - langfuse_default
+    environment:
+      - LANGFUSE_HOST=${LANGFUSE_HOST}
+      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY}
+      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY}
+      # judge: 클라우드 vLLM 직결 (모델명은 게이트웨이 별칭이 아닌 실제 모델명)
+      - JUDGE_BASE_URL=${JUDGE_BASE_URL}
+      - JUDGE_API_KEY=${JUDGE_API_KEY}
+      - JUDGE_MODEL=${JUDGE_MODEL}
+      # Qwen3 계열 전용 thinking off 스위치 (선택, 미설정이면 끄지 않음)
+      - JUDGE_DISABLE_THINKING=${JUDGE_DISABLE_THINKING:-}
+
+networks:
+  langfuse_default:
+    external: true

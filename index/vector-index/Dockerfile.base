@@ -1,0 +1,34 @@
+# syntax=docker/dockerfile:1.6
+
+FROM python:3.11-slim AS base
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    BGE_M3_MODEL_PATH=/opt/models/bge-m3
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade pip && pip install --no-cache-dir huggingface_hub==0.23.2
+
+RUN mkdir -p "${BGE_M3_MODEL_PATH}" && \
+    python - <<'PY' && \
+    ls -al "${BGE_M3_MODEL_PATH}"
+from huggingface_hub import snapshot_download
+snapshot_download(
+    repo_id="BAAI/bge-m3",
+    local_dir="/opt/models/bge-m3",
+    local_dir_use_symlinks=False,
+    allow_patterns=None,
+)
+PY
+
+WORKDIR /app
+
+CMD ["python", "--version"]
+
+

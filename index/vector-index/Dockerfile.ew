@@ -1,0 +1,40 @@
+# syntax=docker/dockerfile:1.6
+
+ARG BASE_IMAGE_TAG=latest
+FROM registry.example.com/dy-llm/python-base:${BASE_IMAGE_TAG}
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+# LibreOffice (headless) for DOC/PPT/HWP extraction
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libreoffice \
+        libreoffice-writer \
+        libreoffice-impress \
+        libreoffice-calc \
+        libreoffice-l10n-ko \
+        fonts-nanum \
+        fonts-nanum-extra \
+        libreoffice-java-common \
+        default-jre-headless \
+        antiword && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements.txt
+# Optional extractors (DOC/PPT) - textract
+RUN pip install --no-cache-dir textract==1.6.3 python-magic==0.4.27 && \
+    pip install --no-cache-dir "pdfminer.six>=20231228"
+
+# 빌드 번호가 바뀌면 이 아래 레이어 캐시 무효화
+ARG CACHE_BUST=0
+COPY . /app
+
+CMD ["python", "-m", "workers.embedding_worker"]
+
+

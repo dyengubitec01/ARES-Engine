@@ -1,0 +1,15 @@
+name: gliner2_lazy_1000
+description: GLiNER2 추출 + 공출현+Louvain, 1000청크 (스케일업)
+# 측정: 추출 ~13분 (Gemma full 17h 대비 ~80배 빠름), 11 커뮤니티 생성
+
+extractor:
+  type: gliner2
+  chunks: data/chunks/scaled_1000.json
+
+graph:
+  type: lazy_community
+  min_entity_len: 2
+
+outputs:
+  extracted: data/graphs/gliner2/extracted_1000.json
+  graph: data/graphs/gliner2/lazy_community_1000.json

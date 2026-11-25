@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "purpose": "Fan-out 관계 종합 + 환각 함정 추가 검증 (그래프 RAG 강점 구간 확정)",
+    "domain": "가상 자율주행 스타트업 Autonova",
+    "total_questions": 8,
+    "distribution": {
+      "fanout_relation": 5,
+      "hallucination_trap": 3
+    },
+    "note": "fanout = 한 엔티티 중심으로 연결된 모든 인물 종합 (그래프 강점 가설). hallucination_trap = 직접 관계 없는 두 인물 (그래프의 환각 억제 가설 — 실제 연결만 따라가므로 거짓 관계 안 만듦)"
+  },
+  "qa_set": [
+    {
+      "id": 21,
+      "category": "fanout_relation",
+      "subtype": "CEO 중심 fan-out",
+      "question": "김지훈 CEO와 직접 또는 간접적으로 연결된 인물을 모두 정리하면?",
+      "expected_answer": "박서연(공동창업자, 2017 학회에서 만남), 한수정(김지훈이 직접 영입, 만도 공동 프로젝트 인연), 이도현(COO). 간접: 한수정을 통해 강현우(만도 동료).",
+      "required_chunks": [8, 17, 19, 21, 30],
+      "answer_must_contain": ["박서연", "한수정"],
+      "answer_must_not_contain": [],
+      "evaluation_notes": "김지훈 중심 fan-out. 박서연(공동창업)+한수정(영입)이 핵심. 그래프가 연결 인물을 묶어 회수하는지."
+    },
+    {
+      "id": 22,
+      "category": "fanout_relation",
+      "subtype": "KAIST 연결 fan-out",
+      "question": "KAIST와 연결된 Autonova 인물을 모두 정리하면?",
+      "expected_answer": "박서연(KAIST 박사 2014, 교수 2008~2014), 정민호(KAIST 박사 2016, 박서연 직제자), 강현우(KAIST 석사 2017, 박서연 직제자).",
+      "required_chunks": [4, 15, 18, 28, 29],
+      "answer_must_contain": ["박서연", "정민호", "강현우"],
+      "answer_must_not_contain": [],
+      "evaluation_notes": "KAIST라는 공통 연결고리로 3명 종합. 그래프가 KAIST 노드 중심으로 묶는지."
+    },
+    {
+      "id": 23,
+      "category": "fanout_relation",
+      "subtype": "대표 중심 fan-out",
+      "question": "한수정 Drive 대표와 연결된 인물을 모두 정리하면?",
+      "expected_answer": "김지훈(한수정을 직접 영입, 만도 공동 프로젝트 인연), 강현우(만도 시절 동료이자 한수정이 Drive로 영입), 임승호(강현우 직속이므로 한수정 산하).",
+      "required_chunks": [19, 30, 32],
+      "answer_must_contain": ["김지훈", "강현우"],
+      "answer_must_not_contain": [],
+      "evaluation_notes": "한수정 중심 fan-out. 영입자(김지훈)+피영입자(강현우) 양방향."
+    },
+    {
+      "id": 24,
+      "category": "fanout_relation",
+      "subtype": "전직장 인맥 fan-out",
+      "question": "만도 출신이거나 만도 인맥으로 Autonova에 합류한 인물을 모두 알려줘.",
+      "expected_answer": "한수정(만도 제어 엔지니어 12년), 강현우(만도 4년 근무, 한수정과 만도 동료, 한수정이 영입).",
+      "required_chunks": [19, 29, 30],
+      "answer_must_contain": ["한수정", "강현우"],
+      "answer_must_not_contain": [],
+      "evaluation_notes": "만도라는 전직장 연결고리로 2명 종합."
+    },
+    {
+      "id": 25,
+      "category": "fanout_relation",
+      "subtype": "영입 관계 fan-out",
+      "question": "윤재혁 Maps 대표가 영입한 인물을 모두 정리하면?",
+      "expected_answer": "김나래(전 삼성SDS, V2X 팀장), 오태경(전 카카오모빌리티, 윤재혁의 카카오모빌리티 시절 동료).",
+      "required_chunks": [20, 33],
+      "answer_must_contain": ["김나래", "오태경"],
+      "answer_must_not_contain": [],
+      "evaluation_notes": "윤재혁 중심 영입 fan-out. 두 명 모두 윤재혁이 영입."
+    },
+    {
+      "id": 26,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정",
+      "question": "박서연 CTO와 윤재혁 Maps 대표는 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 박서연은 KAIST 출신으로 Vision/Drive 기술 라인과 연결되고, 윤재혁은 네이버/카카오 출신으로 이도현이 영입한 Maps 라인. 두 사람 사이 직접적 사제·동료·영입 관계는 자료에 없음. 같은 회사 임원이라는 점만 공통.",
+      "required_chunks": [15, 18, 20],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "지도", "직제자", "함께 창업", "공동 창업", "만도 동료"],
+      "evaluation_notes": "환각 함정. 직접 관계 없는데 Vector가 의미 유사도로 '같은 임원이니 관련' 식 환각 가능. 그래프는 직접 엣지 없으면 관계 없음 답 가능."
+    },
+    {
+      "id": 27,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정",
+      "question": "정민호 Vision 대표와 한수정 Drive 대표는 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 정민호는 박서연의 KAIST 직제자로 영입됨, 한수정은 김지훈이 만도 인연으로 영입함. 두 사람은 각각 다른 경로로 합류했고 직접적 사제·동료 관계 없음. 둘 다 자회사 대표라는 점만 공통.",
+      "required_chunks": [18, 19, 28, 30],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "지도", "직제자", "만도 동료", "함께 근무"],
+      "evaluation_notes": "환각 함정. 둘 다 자회사 대표지만 직접 연결 없음. 그래프가 직접 엣지 부재를 정확히 반영하는지."
+    },
+    {
+      "id": 28,
+      "category": "hallucination_trap",
+      "subtype": "직접 관계 없음 함정",
+      "question": "최영민 카메라팀장과 강현우 제어팀장은 어떤 관계인가?",
+      "expected_answer": "직접적인 관계 없음. 최영민은 LG전자 출신으로 Vision의 정민호 직속, 강현우는 KAIST/만도 출신으로 Drive의 한수정 직속. 서로 다른 자회사의 팀장이며 직접적 관계는 자료에 없음.",
+      "required_chunks": [29, 31, 32],
+      "answer_must_contain": ["없"],
+      "answer_must_not_contain": ["사제", "같은 팀", "동료로", "함께 근무", "직속"],
+      "evaluation_notes": "환각 함정. 둘 다 팀장이지만 다른 자회사. 직접 연결 없음."
+    }
+  ]
+}

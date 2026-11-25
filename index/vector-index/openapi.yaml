@@ -1,0 +1,360 @@
+openapi: 3.0.3
+info:
+  title: RAG Embedding Request Server (Test)
+  description: 임베딩 요청 서버 - Kafka 발행 테스트 버전
+  version: 0.1.0
+servers:
+  - url: http://localhost:8100
+    description: 로컬 서버
+  - url: http://localhost:8200
+    description: 개발 서버
+  - url: http://localhost:8100
+    description: 운영 서버
+paths:
+  /embedding-requests:
+    post:
+      summary: 파일 임베딩 요청
+      description: 로컬 파일 경로 또는 MinIO 객체 키를 통해 임베딩을 요청합니다.
+      operationId: createEmbeddingRequest
+      requestBody:
+        description: 임베딩 요청 정보
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmbeddingRequest'
+            examples:
+              default:
+                summary: 기본 예시
+                value:
+                  doc_content_id: "11111111-1111-4111-8111-111111111111"
+                  minio_bucket: "rag"
+                  minio_object_key: "raw/22222222-2222-4222-8222-222222222222/2026/01/33333333-3333-4333-8333-333333333333/sample.pdf"
+                  embedding_profile: "bge_m3_v1"
+                  enable_ocr: true
+                  requested_by: "44444444-4444-4444-8444-444444444444"
+                  auth_dept_id: "22222222-2222-4222-8222-222222222222"
+      responses:
+        '200':
+          description: 요청 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbeddingRequestResponse'
+        '400':
+          description: 잘못된 요청 (파일 없음 등)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 서버 내부 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /re-embedding-requests:
+    post:
+      summary: 재임베딩 요청
+      description: |
+        이미 임베딩 완료(COMPLETED) 또는 실패(FAILED) 상태의 문서를 재임베딩합니다.
+        기존 청크, 임베딩 인덱스, Qdrant 포인트, 처리 통계를 정리한 후 새로운 임베딩 Job을 생성합니다.
+      operationId: createReEmbeddingRequest
+      requestBody:
+        description: 재임베딩 요청 정보
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReEmbeddingRequest'
+            examples:
+              default:
+                summary: 기본 예시
+                value:
+                  doc_content_id: "11111111-1111-4111-8111-111111111111"
+                  embedding_profile: "bge_m3_v1"
+                  enable_ocr: true
+                  requested_by: "44444444-4444-4444-8444-444444444444"
+      responses:
+        '200':
+          description: 요청 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbeddingRequestResponse'
+        '404':
+          description: 문서를 찾을 수 없음
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: 재임베딩할 수 없는 상태 (미임베딩, 처리 중 등)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 서버 내부 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /health:
+    get:
+      summary: 헬스 체크
+      description: 서버 상태를 확인합니다.
+      operationId: healthCheck
+      responses:
+        '200':
+          description: 정상
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /query:
+    post:
+      summary: 쿼리(질문) 임베딩
+      description: 질의 문장을 BGE-M3 모델을 사용하여 벡터로 변환합니다.
+      operationId: queryEmbeddings
+      requestBody:
+        description: 질의 문장
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: 임베딩 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          description: 잘못된 요청
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 서버 내부 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /query-hybrid:
+    post:
+      summary: 쿼리(질문) 하이브리드 임베딩
+      description: 질의 문장을 BGE-M3 모델을 사용하여 dense + sparse 벡터로 동시에 변환합니다.
+      operationId: queryHybridEmbeddings
+      requestBody:
+        description: 질의 문장
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: 하이브리드 임베딩 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryHybridResponse'
+        '400':
+          description: 잘못된 요청
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: 서버 내부 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    EmbeddingRequest:
+      type: object
+      required:
+        - doc_content_id
+        - requested_by
+        - auth_dept_id
+      properties:
+        doc_content_id:
+          type: string
+          format: uuid
+          description: 이미 생성된 문서 컨텐츠 ID
+          default: "11111111-1111-4111-8111-111111111111"
+        local_path:
+          type: string
+          description: 로컬 파일 경로 (MinIO 정보가 없을 경우 필수)
+        minio_bucket:
+          type: string
+          description: MinIO 버킷 이름
+          default: "rag"
+        minio_object_key:
+          type: string
+          description: MinIO 객체 키
+          default: "raw/22222222-2222-4222-8222-222222222222/2026/01/33333333-3333-4333-8333-333333333333/sample.pdf"
+        embedding_profile:
+          type: string
+          enum:
+            - "bge_m3_v1"
+            - "bge_m3_hybrid_v2"
+          description: "임베딩 프로필 (bge_m3_v1: 기존 dense 전용, bge_m3_hybrid_v2: dense+sparse 하이브리드)"
+          default: "bge_m3_v1"
+        enable_ocr:
+          type: boolean
+          description: "OCR 활성화 (이미지/스캔 문서 처리). 모든 지원 형식(PDF/DOC/DOCX/PPT/PPTX/XLSX/XLSM/HWP/HWPX)에서 동작. OCR 텍스트는 본문 흐름 안에 inline 삽입되어 같은 청크에서 검색됨 — HWPX는 paragraph 위치 정확, HWP는 본문 균등 분산, PPTX는 슬라이드 내 결합, XLSX는 시트 마지막 row에 추가. XLS/CSV/TXT 등 이미지 없는 형식에서는 무시됨."
+          default: false
+        requested_by:
+          type: string
+          description: 요청자 식별자
+          default: "44444444-4444-4444-8444-444444444444"
+        auth_dept_id:
+          type: string
+          format: uuid
+          description: 요청자 부서 ID
+          default: "22222222-2222-4222-8222-222222222222"
+    EmbeddingRequestResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+          format: uuid
+          description: 생성된 Job ID
+        doc_content_id:
+          type: string
+          format: uuid
+        local_path:
+          type: string
+          nullable: true
+        minio_bucket:
+          type: string
+          nullable: true
+        minio_object_key:
+          type: string
+          nullable: true
+        embedding_profile:
+          type: string
+        requested_by:
+          type: string
+        auth_dept_id:
+          type: string
+          format: uuid
+          description: 요청자 부서 ID
+        requested_at:
+          type: string
+          format: date-time
+          description: 요청 시각 (ISO 8601 형식)
+    QueryRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: 임베딩할 질의 문장
+          default: "안녕하세요 저는 DY대영입니다."
+          example: "안녕하세요 저는 DY대영입니다."
+    QueryResponse:
+      type: object
+      properties:
+        query:
+          type: string
+        model:
+          type: string
+        model_path:
+          type: string
+        dim:
+          type: integer
+        vector:
+          type: array
+          items:
+            type: number
+            format: float
+    QueryHybridResponse:
+      type: object
+      properties:
+        query:
+          type: string
+        model:
+          type: string
+        dim:
+          type: integer
+          description: dense 벡터 차원 수
+        dense:
+          type: array
+          items:
+            type: number
+            format: float
+          description: dense 임베딩 벡터 (1024차원)
+        sparse:
+          type: object
+          description: sparse 임베딩 벡터
+          properties:
+            indices:
+              type: array
+              items:
+                type: integer
+              description: 토큰 인덱스
+            values:
+              type: array
+              items:
+                type: number
+                format: float
+              description: 토큰 가중치
+    ReEmbeddingRequest:
+      type: object
+      required:
+        - doc_content_id
+        - requested_by
+      properties:
+        doc_content_id:
+          type: string
+          format: uuid
+          description: 재임베딩할 문서 컨텐츠 ID
+          default: "11111111-1111-4111-8111-111111111111"
+        embedding_profile:
+          type: string
+          enum:
+            - "bge_m3_v1"
+            - "bge_m3_hybrid_v2"
+          description: "임베딩 프로필 (bge_m3_v1: 기존 dense 전용, bge_m3_hybrid_v2: dense+sparse 하이브리드)"
+          default: "bge_m3_v1"
+        enable_ocr:
+          type: boolean
+          description: "OCR 활성화 (이미지/스캔 PDF 처리). 켜면 페이지 단위로 텍스트/이미지를 자동 판정 후 Nemotron OCR v2로 처리. 현재 PDF만 지원. re_chunk 모드일 때만 의미 있음 (re_vectorize는 기존 청크 재사용)."
+          default: false
+        requested_by:
+          type: string
+          description: 요청자 식별자
+          default: "44444444-4444-4444-8444-444444444444"
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: 서버 상태
+          example: "ok"
+        service:
+          type: string
+          description: 서비스명
+          example: "ER (Embedding Request Server)"
+        timestamp:
+          type: string
+          format: date-time
+          description: 응답 시각
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: 에러 메시지
+        detail:
+          type: string
+          description: 상세 에러 정보
+          nullable: true

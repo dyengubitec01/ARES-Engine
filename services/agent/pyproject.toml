@@ -1,0 +1,97 @@
+[project]
+name = "agent-server"
+version = "0.1.0"
+description = "LangGraph-based AI Agent Server"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "ARES team" }
+]
+
+dependencies = [
+    "fastapi>=0.109.0,<1.0.0",
+    "uvicorn[standard]>=0.25.0,<1.0.0",
+    # LangChain 1.x 생태계 - 주요 버전 업데이트 시 호환성 확인 필요
+    "langchain-core>=0.3.0,<0.4.0",
+    "langchain-openai>=0.3.0,<0.4.0",
+    "langchain>=0.3.0,<0.4.0",  # Required for LangFuse CallbackHandler
+    "langgraph>=0.2.0,<0.3.0",
+    "pydantic>=2.0,<3.0",
+    "pydantic-settings>=2.0,<3.0",
+    "httpx>=0.25.0,<1.0.0",
+    "pyyaml>=6.0,<7.0",
+    "structlog>=24.1.0,<25.0.0",
+    "tzdata>=2024.1; sys_platform == 'win32'",
+]
+
+[project.optional-dependencies]
+tracing = [
+    # LangFuse SDK v3 for LangFuse V3 server
+    # Requires: LangFuse Server >= 3.63.0
+    # Supports: LangChain 1.x, Python 3.10+
+    "langfuse>=3.8.0",
+]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "ruff",
+    "tox",
+    "langfuse>=3.8.0",  # SDK v3 for LangChain 1.x support
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "integration: marks tests as integration tests (require LangFuse + LLM server)",
+]
+# 기본 실행 시 integration 테스트 제외
+addopts = "-m 'not integration'"
+
+[tool.tox]
+# tox 4.x 이상 pyproject.toml 네이티브 설정
+legacy_tox_ini = """
+[tox]
+envlist = py311
+isolated_build = true
+
+[testenv]
+deps =
+    .[dev]
+commands =
+    pytest {posargs:tests/}
+
+[testenv:integration]
+deps =
+    .[dev]
+commands =
+    pytest tests/integration/ -m integration {posargs}
+
+[testenv:lint]
+deps =
+    ruff
+commands =
+    ruff check app/ tests/
+
+[testenv:coverage]
+deps =
+    .[dev]
+commands =
+    pytest --cov=app --cov-report=term-missing --cov-report=html {posargs:tests/}
+"""

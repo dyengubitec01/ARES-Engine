@@ -1,0 +1,41 @@
+name: 06_stage_pipeline_demo
+description: |
+  Stage 기반 합성기 데모 — 같은 retriever 위에 stage 조합만 바꿔 3트랙 비교.
+  - vector_1stage: single_shot 1개 → vector_baseline과 동일 행동
+  - vector_2stage: single_shot + verify → vector_verify와 동일 행동
+  - lazy_qt_3stage: relevance_filter + claim_extraction + reduce → lazy_qt와 동일 행동
+  YAML에서 stage 추가/제거만으로 기법 토글 가능함을 확인.
+
+corpus: data/chunks/golden_40.json
+
+qa:
+  - data/qa/golden_qa.json
+
+categories: [control]   # 스모크: control 4문만
+
+tracks:
+  vector_1stage:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: single_shot, prompt: system_baseline}
+
+  vector_2stage:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: single_shot, prompt: system_baseline}
+        - {type: verify, prompt: verify_v1}
+
+  lazy_qt_3stage:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/06_stage_pipeline_demo

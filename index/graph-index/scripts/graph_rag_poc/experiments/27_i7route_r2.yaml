@@ -1,0 +1,50 @@
+name: 27_i7route_r2
+description: |
+  기법 I-7 (K²RAG Corpus Pre-Summarization) 다운스트림 QA — full 설명 레이어가 답변을 돕나?
+  설계·이력: experiments/I7_BUILD_LOG.md. 코퍼스 = 원본1000 + full 설명 292(엔티티281+커뮤11, chunk_index>=200000).
+  3트랙(같은 런 비교, gen_temperature=0):
+    - lazy_qt   : baseline. vector_topk(max_index 200000)로 설명 무시 → 기존 벡터검색 그대로.
+    - i7_route  : Track A 라우팅 전용. 설명이 검색되면 route_chunks를 끌어오되, 답변은 원본청크에서만(설명 제외).
+    - i7_gen    : Track B 라우팅+생성. 설명 텍스트도 답변 컨텍스트에 포함.
+  게이트: A의 chunk_recall 먼저 확인(↑/flat?) → 통과 시에만 B 해석. synthesizer는 셋 다 동일(retriever 순효과 격리).
+techniques: [I-7]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000_i7full.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+
+categories: null
+
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20, max_index: 200000}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  i7_route:
+    retriever: {type: i7_route, top_k: 20, route_topn: 5, include_desc: false}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  i7_gen:
+    retriever: {type: i7_route, top_k: 20, route_topn: 5, include_desc: true}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/27_i7route_r2

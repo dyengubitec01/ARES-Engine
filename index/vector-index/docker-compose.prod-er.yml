@@ -1,0 +1,57 @@
+services:
+  er:
+    build:
+      context: .
+      dockerfile: Dockerfile.er
+    image: registry.example.com/ares/er:${ER_IMAGE_TAG:-latest}
+    container_name: er_server
+    restart: always
+    ports:
+      - "8100:8100"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    environment:
+      APP_ENV: "prod"
+      TRANSFORMERS_VERBOSITY: error
+      TRANSFORMERS_NO_ADVISORY_WARNINGS: "1"
+      TQDM_DISABLE: "1"
+      PYTHONUNBUFFERED: "1"
+      # Kafka 설정
+      KAFKA_BOOTSTRAP_SERVERS: "localhost:9092"
+      KAFKA_REQUEST_TOPIC: rag.embeddings.request
+      KAFKA_STATUS_TOPIC: rag.embeddings.status
+      KAFKA_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      KAFKA_SASL_MECHANISM: SCRAM-SHA-256
+      KAFKA_SASL_USERNAME: rag-user
+      KAFKA_SASL_PASSWORD: ${KAFKA_SASL_PASSWORD}
+      # MinIO 설정
+      MINIO_ENDPOINT: "localhost:9000"
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_SECURE: "false"
+      # Qdrant 설정
+      QDRANT_HOST: "localhost"
+      QDRANT_PORT: "6333"
+      # PostgreSQL 설정
+      POSTGRES_HOST: "localhost"
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: raguser
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ragdb
+      POSTGRES_SCHEMA: rag
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - rag-net
+    command: ["uvicorn", "api.er_server:app", "--host", "0.0.0.0", "--port", "8100", "--log-level", "warning"]
+
+networks:
+  rag-net:
+    name: rag-net
+    driver: bridge

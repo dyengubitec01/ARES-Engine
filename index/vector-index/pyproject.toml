@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vector-rag-index"
+version = "1.0.0"
+description = "Vector RAG indexing pipeline (base): 임베딩/청킹/OCR + RDB·Qdrant 모델. Graph_RAG_Index 애드온이 의존하는 base 패키지."
+requires-python = ">=3.11"
+dynamic = ["dependencies"]
+
+# 최상위 모듈/패키지 노출. import 이름(config/models/embeddings/…)은 그대로 유지 —
+# Graph_RAG_Index 가 `from config import settings`, `from models.rdb_models import Base`,
+# `from embeddings.bge_m3_client import BGEM3Client` 로 이 base 를 참조한다.
+[tool.setuptools]
+py-modules = ["config"]
+
+[tool.setuptools.packages.find]
+include = ["models*", "embeddings*", "chunking*", "db*", "workers*", "api*", "kafka_client*", "utils*", "storage*"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }

@@ -1,0 +1,36 @@
+[project]
+name = "rag-search-server"
+version = "0.1.0"
+description = "Lightweight RAG Search Server - Retriever & Reranker for agent systems"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.104.0,<1.0.0",
+    "uvicorn[standard]>=0.24.0,<1.0.0",
+    "pydantic>=2.0,<3.0",
+    "pydantic-settings>=2.0,<3.0",
+    "httpx>=0.25.0,<1.0.0",
+    "python-dotenv>=1.0.0,<2.0.0",
+    "pyyaml>=6.0,<7.0",
+    "langfuse>=3.8.0,<4.0.0",
+    "qdrant-client>=1.12.0,<2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0,<9.0",
+    "pytest-asyncio>=0.21,<1.0",
+    "httpx",
+]
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = [
+    "integration: 실서버 연동 통합 테스트 (실행 시 --run-integration 필요)",
+]

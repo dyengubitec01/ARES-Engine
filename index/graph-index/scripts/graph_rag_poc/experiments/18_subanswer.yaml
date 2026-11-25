@@ -1,0 +1,33 @@
+name: 18_subanswer
+description: |
+  기법 G-4 (Sub-Answer Aggregation). 질문 분해 → sub-Q별 완전 답변 → 종합.
+  A-2(claim 분해, 기각)의 answer-레벨 변형. 둘 다 R-5(multihop) 위. baseline=lazy_qt.
+  예상: A-2와 같은 분해 축이라 유사 결과(기각 가능성)지만 데이터 완성 위해 측정.
+techniques: [G-4]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_fanout.json
+  - data/qa/golden_qa_halluc.json
+categories: null
+
+tracks:
+  lazy_qt:
+    retriever: {type: multihop, top_k: 20, hop2_k: 5}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+  sub_answer_agg:
+    retriever: {type: multihop, top_k: 20, hop2_k: 5}
+    synthesizer:
+      type: sub_answer_agg
+      relevance_prompt: relevance_strict
+      decompose_prompt: subq_decompose
+
+output: results/18_subanswer

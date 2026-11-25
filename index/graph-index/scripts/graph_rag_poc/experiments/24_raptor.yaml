@@ -1,0 +1,28 @@
+name: 24_raptor
+description: |
+  기법 I-5 (RAPTOR, 1레벨 collapsed-tree). 청크 클러스터 LLM 요약 40개를 회수 풀에 추가.
+  corpus=scaled_1000_raptor(원1000+요약40). baseline=vector_topk(max_index=100000, 원청크만) vs raptor(요약 포함 회수).
+  유일하게 새 축(사전 계층요약). 가설: global/집계/sensemaking 질문에서 요약 청크가 도움?
+techniques: [I-5]
+gen_temperature: 0
+corpus: data/chunks/scaled_1000_raptor.json
+qa: [data/qa/golden_qa.json, data/qa/golden_qa_fanout.json, data/qa/golden_qa_halluc.json]
+categories: null
+tracks:
+  lazy_qt:
+    retriever: {type: vector_topk, top_k: 20, max_index: 100000}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  raptor:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+output: results/24_raptor

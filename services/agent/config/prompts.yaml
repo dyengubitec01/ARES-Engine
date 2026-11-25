@@ -1,0 +1,20 @@
+# LangFuse Prompt Management 설정
+# prompt_manager, pre-fetch, CI/CD 변수 검증 모두 이 파일을 참조한다.
+# 새 노드 추가 시 이 파일 + LangFuse 등록만 하면 된다.
+
+prompts:
+  rewriter:
+    variables: [history, query]
+    type: chat
+
+  synthesizer:
+    variables: [history, context, query]
+    type: chat
+
+  synthesizer-no-rag:
+    variables: [history, query]
+    type: chat
+
+  router:
+    variables: [routes_text, route_options, query]
+    type: chat

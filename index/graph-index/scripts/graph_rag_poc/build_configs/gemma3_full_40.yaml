@@ -1,0 +1,19 @@
+name: gemma3_full_40
+description: |
+  Gemma3-27B로 풀 추출(엔티티+관계 라벨+디스크립션) + full_relational 그래프.
+  주의: 청크당 ~1분이라 40청크 ~40분, 1000청크면 ~17h(비현실적).
+  양산엔 부적합 — 경량 모델(Qwen3, GLiNER2)로 교체 필요.
+
+extractor:
+  type: gemma3
+  chunks: data/chunks/golden_40.json
+
+graph:
+  type: full_relational
+  strict_validation: true
+  min_entity_len: 2
+  relation_weight_factor: 1.0
+
+outputs:
+  extracted: data/graphs/gemma3/extracted_40.json
+  graph: data/graphs/gemma3/community_40.json

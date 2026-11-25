@@ -1,0 +1,35 @@
+name: 32_graph_rag_standard
+description: |
+  표준 graph_rag (논문 기법 0개) — 그래프 순회 단일 표준 vs 벡터 baseline.
+  graph_rag = entity_linking + neighborhood + path + community 통합 1 retriever.
+  골든셋: 그래프 유리 유형 (relation 10 + sensemaking 9). 향후 논문 기법은 이 표준 위에 얹어 비교.
+techniques: [graph_rag-standard]
+gen_temperature: 0
+
+corpus: data/chunks/scaled_1000.json
+
+qa:
+  - data/qa/golden_qa.json
+  - data/qa/golden_qa_graphtypes.json
+
+categories: [relation_reasoning, sensemaking]
+
+tracks:
+  vector:
+    retriever: {type: vector_topk, top_k: 20}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+  graph_rag:
+    retriever: {type: graph_rag, top_k: 20, graph: data/graphs/gliner2/lazy_community_1000.json, top_entities: 8, hops: 2, max_path_len: 3, use_community: true}
+    synthesizer:
+      type: pipeline
+      stages:
+        - {type: relevance_filter, prompt: relevance_strict}
+        - {type: claim_extraction, prompt: claim_strict}
+        - {type: reduce, prompt: system_baseline}
+
+output: results/32_graph_rag_standard
